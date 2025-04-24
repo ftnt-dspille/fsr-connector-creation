@@ -13,7 +13,7 @@ This guide covers the steps for deploying Fabric Studio (FS) in your own lab env
 
 Download your Fabric Studio image from [Sharepoint](https://fortinet-my.sharepoint.com/personal/jparente_fortinet-us_com/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Fjparente%5Ffortinet%2Dus%5Fcom%2FDocuments%2FFabric%20Studio%2F2%2E0&ga=1).
 
-![Fabric Studio download page](img.png)
+![Fabric Studio download page](images/img.png)
 
 {{% notice note %}}
 Only GCP or qcow2 images are available. If you need to convert to vmdk format, you can use the following command:
@@ -85,33 +85,33 @@ To configure a static address in the console:
 1. Go to [https://register.fabricstudio.net/](https://register.fabricstudio.net/)
 2. Log in using corporate SSO credentials
 3. Navigate to **My Account**
-   ![Account dashboard](img_1.png)
+   ![Account dashboard](images/img_1.png)
 
 4. Select the **Tokens** tab
-   ![Tokens tab](img_2.png)
+   ![Tokens tab](images/img_2.png)
 
 5. Click the **+** icon to create a new token
 6. Enter `Fabric Studio` as the Title and click Submit
-   ![Create token](img_3.png)
+   ![Create token](images/img_3.png)
 
 7. Click the Copy button to copy the **Token+Secret**
-   ![Copy token](img_8.png?height=300px)
+   ![Copy token](images/img_8.png?height=300px)
 
 ### Register Your Instance
 
 1. Connect to your Fabric Studio VM through HTTPS
 2. Type `admin` as the user. There is not a password configured by default. Click **Login**
-   ![Login screen](img_4.png)
+   ![Login screen](images/img_4.png)
 
 3. Check the registration status on the dashboard
-   ![Dashboard](img_5.png)
+   ![Dashboard](images/img_5.png)
 
 4. Go to System/Registration
 5. Paste your token+secret and click Register
 6. Wait for the success message
-   ![Registration successful](img_6.png)
+   ![Registration successful](images/img_6.png)
 7. Navigate to **Repositories > Remote** to verify available Fabric templates
-   ![Available templates](img_7.png?height=300px)
+   ![Available templates](images/img_7.png?height=300px)
 
 ## Next Steps
 
