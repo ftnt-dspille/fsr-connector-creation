@@ -1,13 +1,13 @@
 # don't change the following 8 lines
-baseURL = "http://tec.myfortinet.com/"
+baseURL = "http://tec.myfortinet.com"
 canonifyURLs = false
 relativeURLs = false
 languageCode = "en-US"
 defaultContentLanguage = "en"
 theme = ["hugo-theme-relearn"]
 metaDataFormat = "yaml"
-defaultContentLanguageInSubdir = "false"
-uglyurls = "true"
+defaultContentLanguageInSubdir = false
+uglyurls = true
 enableEmoji = true
 
 
@@ -17,16 +17,16 @@ title = "Fabric Studio"
 
 [params]
 # Author of the site, will be used in meta information
-author.name = "Jingshao Chen"
+author.name = "Dylan Spille"
 # Select a color theme.
 # special
-themeVariant = "Workshop"
-  "Xperts2024",
-  "Xperts2023",
-  "Spotlight",
-  "Demo",
-  "UseCase",
-  "Workshop",
+themeVariant = [
+    "Xperts2024",
+    "Xperts2023",
+    "Spotlight",
+    "Demo",
+    "UseCase",
+    "Workshop",
 ]
 # red
 # themeVariant = "Workshop"
@@ -38,7 +38,7 @@ themeVariant = "Workshop"
 # themeVariant = "UseCase"
 
 # The banner text under Fortinet logo on the top left of the project. Better to be short.
-logoBannerText = "Author's Guide"
+logoBannerText = "Fabric Studio"
 # Small text under the title
 logoBannerSubText = "Internal Only"
 ################################# END EDITING #################################
@@ -48,12 +48,12 @@ logoBannerSubText = "Internal Only"
 showVisitedLinks = true
 # Disable search function. It will hide search bar
 disableSearch = false
-# Javascript and CSS cache are automatically busted when new version of site is generated. 
+# Javascript and CSS cache are automatically busted when new version of site is generated.
 # Set this to true to disable this behavior (some proxies don't handle well this optimization)
 disableAssetsBusting = true
 # Set this to true to disable copy-to-clipboard button for inline code.
 disableInlineCopyToClipBoard = false
-# A title for shortcuts in menu is set by default. Set this to true to disable it. 
+# A title for shortcuts in menu is set by default. Set this to true to disable it.
 disableShortcutsTitle = false
 
 # If set to false, a Home button will appear below the search bar on the menu.
@@ -71,7 +71,7 @@ ordersectionsby = "weight"
 
 landingPageName = "<i class='fas fa-home'></i> Home"
 
-version = "v0.0.0"
+version = "v1.0.2"
 
 [[menu.shortcuts]]
 name = "<i class='fas fa-print'></i> Single Page View (for printing)"
@@ -82,6 +82,10 @@ weight = 1
 name = "<i class='fas fa-download'></i> Download Test CSV"
 url = "./chapter-02-markdown/patches/test.csv?download=true"
 weight = 5
+[[menu.shortcuts.params]]
+download = true
+
+
 [[menu.shortcuts]]
 name = "<i class='fas fa-book'></i> Hugo ReLearn Theme"
 url = "https://mcshelby.github.io/hugo-theme-relearn/"
@@ -95,18 +99,17 @@ name = "<i class='fas fa-book'></i> Hugo"
 url = "https://gohugo.io"
 weight = 4
 
-[menu.shortcuts.params]
-download = false
-
-[menu.shortcuts.params]
-download = true
-
 [outputs]
-home = ["HTML", "RSS"]
+home = ["HTML", "markdown"]
+page = ["HTML", "markdown"]
+section = ["HTML", "markdown"]
 
 [markup]
 defaultMarkdownHandler = "goldmark"
-[markup.goldmark]
-hrefTargetBlank = true
-[markup.highlight]
-guessSyntax = true
+# [markup.goldmark]
+# hrefTargetBlank = true
+[markup.goldmark.renderer]
+unsafe = true
+# [services]
+# [services.googleAnalytics]
+# id = 'G-X00NPMLQFJ'

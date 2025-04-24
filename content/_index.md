@@ -1,41 +1,40 @@
 ---
-title: How to Create a TEC Document Project
-weight: 1
-description: |
-  This document is the user guide on how to write a TEC (Tech Exchange Community) document.
-  It provides the details of installation, usage, steps, as well as examples on git, hugo, markdown, etc.
-archetype: home
+title: "Fabric Studio"
+linkTitle: "Fabric Studio"
+weight: 40
+description: "Documentation and resources for Fabric Studio"
 ---
 
-This document is the user guide on how to write a TEC (Tech Exchange Community) document.
+## Documentation Pages
 
-It provides the details of installation, usage, steps, as well as examples on
-git, hugo, markdown, etc.
+{{% children %}}
 
-This document also serves as an example on how to write markdown for TEC.
-You can see the source code of any page in this document to see how it is written.
-Just click the [<i class="fab fa-markdown"></i>]()
-button on the top bar.
+## Important Resources
 
-You can also check the source code of this document
-on GitLab [here](https://svl-devops-gitlab01.fortilab.fortinet.com/tec-content/devops/tec-user-guide).
+### Documentation
 
-### Contents
+Access the official documentation and resources on the internal Sharepoint site:
 
-1. [From Zero to Publish a TEC Document](chapter-01-start.html)
-   - This chapter covers installation and basic work flow on editing and publishing.
-1. [Markdown and Goodies](chapter-02-markdown.html)
-   - This chapter covers Markdown features to make your documents look nice. It includes
-   - images
-   - notices
-   - quiz
-   - carousel
-   - Color text
-   - Download link
-   - Fortinet icons
-1. [How to use Git](chapter-03-git.html)
-   - This chapter covers basic usage of git
-1. [How to create new project (for admin)](chapter-04-admin.html)
-   - For admin to create a new blank TEC project for authors
+{{< button href="https://fortinet.sharepoint.com/sites/FabricStudio/SitePages/Home.aspx" icon="sharepoint" >}}Fabric Studio Sharepoint{{< /button >}}
 
-{{%ficon icon="Security Fabric" size="30rem" class="block"%}}
+![Fabric Studio Sharepoint](img.png?height=500px)
+
+### Support
+
+Report bugs or issues with Fabric Studio through the official bug tracker:
+
+{{< button href="https://mantis.fortinet.com/bug_report_page.php?project_id=124&category=fabric-studio" style="warning" icon="bug" >}}Report Bugs{{< /button >}}
+
+### Community
+
+Join the Microsoft Teams channel for updates and community support:
+
+{{< button href="https://teams.microsoft.com/l/team/19%3AH8_ZjjrRfW5y-X9QQZ1R5CBfHzLZzYbMpOiT4izrWZs1%40thread.tacv2/conversations?groupId=c6ab0b94-5912-46a7-9738-c03c97a08974&tenantId=2c36c478-3d00-452f-8535-48396f5f01f0" style="primary" icon="teams" >}}Join Teams Channel{{< /button >}}
+
+![Teams Channel](img_1.png)
+
+{{% notice info %}}
+The Teams channel has multiple sections:
+- **General channel**: Read-only update notifications
+- **Community Q&A**: Where you can ask questions and get help with non-bug related issues
+{{% /notice %}}
