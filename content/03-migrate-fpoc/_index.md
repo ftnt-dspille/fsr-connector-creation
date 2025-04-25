@@ -9,11 +9,15 @@ description: "Steps to migrate FortiDemo environments from FNDN to Fabric Studio
 
 Now that FortiPOC, the underlying tool that runs demos in FNDN, is reaching End of Life (EOL), we need to migrate virtual machines to Fabric Studio. This process involves working with two FortiDemo environments: your original demo and a blank Fabric Studio demo.
 
-## Spin up FortiDemo in FNDN
+## Migration Process
+
+### 1. Export from FortiPOC
+
+#### Spin up FortiDemo in FNDN
 
 As a CSE, you should be familiar with this process, but here are the steps for reference. These examples use a FortiSOAR demo, but you should choose your corresponding demo.
 
-### Navigate to FNDN Demo
+##### Navigate to FNDN Demo
 
 After you have a demo launched and in the **Running** state, click on the Demo. Locate the **FortiPOC Dashboard** button.
 
@@ -26,15 +30,15 @@ If you don't have a button for this, you can access the device by going to the D
 
 ![URL modification example](images/img_28.png?height=350px)
 
-### Login to FortiPOC Dashboard
+##### Login to FortiPOC Dashboard
 
-1. login with the admin credentials. On my instance that is user/pass `admin`/`fabricadmin`
+1. Login with the admin credentials. On my instance that is user/pass `admin`/`fabricadmin`
    ![FortiPOC Login Screen](images/img_30.png?height=300px)
 
 2. On the left side, navigate to **PoCs > Definitions**
    ![PoC Definitions Navigation](images/img_31.png?height=400px)
 
-### Export FortiPOC Demo
+##### Export FortiPOC Demo
 
 {{% notice important %}}
 Before exporting, ensure your original FortiDemo is fully functional and all VMs are running properly.
@@ -51,7 +55,9 @@ If you have multiple PoCs, only export the POC that is running.
 
 You should now have a file with a name ending in .fpoc.
 
-## Spin up Fabric Studio in FNDN
+### 2. Create Fabric Studio Instance
+
+#### Spin up Fabric Studio in FNDN
 
 {{% notice info %}}
 After launching your original FortiDemo, you'll need to create a new Fabric Studio instance in FNDN to migrate your demo.
@@ -65,17 +71,17 @@ After launching your original FortiDemo, you'll need to create a new Fabric Stud
 5. Search for `Fabric-Studio` in the Type Dropdown. Select the first option unless you know your instance needs a large amount of CPU/RAM
     - Fabric-Studio-Empty has 8 CPU, 40GB RAM, 365GB Storage
     - Fabric-Studio-Empty-Big has 20 CPU, 100GB RAM, and 365GB Storage
-   ![Fabric Studio Type Selection](images/img_35.png?height=400px)
+      ![Fabric Studio Type Selection](images/img_35.png?height=400px)
 6. Click Create
 
 Wait until the Fabric Studio demo is ready.
 
-## Import FNDN Export to Fabric Studio
+### 3. Import and Configure
+
+#### Login to Fabric Studio
 
 By this point you should have two FNDN instances.
 ![Two FNDN Instances](images/img_36.png)
-
-### Login to Fabric Studio
 
 1. Click your Fabric Studio instance
 2. Click the HTTPS Button for your **Dashboard**
@@ -83,10 +89,10 @@ By this point you should have two FNDN instances.
 3. Log in with the provided credentials `admin`/`B8bR!c7dM1n6*8`
    ![Fabric Studio Login](images/img_38.png)
 
-You should now see the Fabric Studio Dashboard 
+You should now see the Fabric Studio Dashboard
 ![Fabric Studio Dashboard](images/img_39.png?height=500px)
 
-### Import FPOC File
+#### Import FPOC File
 
 1. Navigate to **Fabric Workspace** and click **Import**
    ![Import Button](images/img_24.png)
@@ -105,18 +111,19 @@ You should now see the Fabric Studio Dashboard
 In some cases, firmware for certain devices might not be found. This often happens when devices were using snapshots, which are not exportable from FortiDemo. You may need to manually upload firmware for these devices.
 
 ![img_40.png](images/img_40.png?height=500px)
-
 {{% /notice %}}
 
-## Run Fabric Demo
+### 4. Install and Test
 
-Once everything looks ok, you can Install the demo. 
+#### Run Fabric Demo
+
+Once everything looks ok, you can Install the demo.
 
 1. Click **Install**
 
-2. Wait for the devices to all install. 
+2. Wait for the devices to all install.
 
-## Run and Test Fabric Studio
+#### Test the Environment
 
 After installation:
 
@@ -125,18 +132,21 @@ After installation:
 3. Confirm all services are working as expected
 4. Document any issues or differences from the original FNDN environment
 
-## Export Fabric Studio "Fabric"
+#### Export Fabric "Fabric"
 
 The team that manages FNDN's FortiDemo is very busy and tight on resources. So it may take some time before they can make a snapshot of the instance and save it. Since the FortiDemo spin has a countdown timer until it auto deletes, it's advised to grab an export from Fabric Studio in case you forget to extend the expiry.
 
-### TODO 
-Add pictures for exporting Fabric
+{{% notice info %}}
+TODO: Add pictures for exporting Fabric
+{{% /notice %}}
 
-## Notify David Chan's Team About New Instance
+### 5. Complete the Migration
+
+#### Notify David Chan's Team
 
 Once your migration is complete and tested:
 
-Obtain the **Demo Type**, **Old demo FortiPOC Dashboard URL**, and the new **Fabric Studio Dashboard URL**. 
+Obtain the **Demo Type**, **Old demo FortiPOC Dashboard URL**, and the new **Fabric Studio Dashboard URL**.
 
 1. Send an email to David Chan's team with details about your new Fabric Studio instance
 
@@ -144,7 +154,7 @@ Obtain the **Demo Type**, **Old demo FortiPOC Dashboard URL**, and the new **Fab
 - **CC**: `jhuber@fortinet.com;btrulove@fortinet.com;dspille@fortinet.com`
 - **Subject**: `Fabric Studio Migration`
 - **BODY**
-
+  
     ```text
     Hello, 
 
@@ -156,7 +166,11 @@ Obtain the **Demo Type**, **Old demo FortiPOC Dashboard URL**, and the new **Fab
     Please proceed with making a new golden image for the Fabric Studio instance. 
     ```
 
-## Uploading Custom Images
+## Advanced Operations
+
+### Managing Custom Images
+
+#### Uploading Custom Images
 
 If you need to use an image that's not available in the Remote Firmwares in Fabric Studio:
 
@@ -190,7 +204,7 @@ Enter the password `B8bR!c7dM1n6*8` when prompted.
 
 Note the **Type** column that indicates the firmware classification (e.g., "SOAR"). Fabric Studio uses this to configure and manage the firmware properly.
 
-## Using Custom Firmware in a Fabric
+#### Using Custom Firmware in a Fabric
 
 1. Navigate to Fabric Workspace and click **Create > Fabric**
    ![Create Fabric](images/img_2.png?height=300px)
@@ -199,7 +213,7 @@ Note the **Type** column that indicates the firmware classification (e.g., "SOAR
    ![Add Device](images/img_3.png?height=300px)
 
 3. Select the type of device you want (by default, Fabric Studio searches the remote repository)
-   ![Device Type Selection](img_5.png?height=300px
+   ![Device Type Selection](img_5.png?height=300px)
 
 4. Click **Browse**, select your custom firmware, then click **OK**
    ![Select Custom Firmware](images/img_6.png?height=300px)
@@ -207,7 +221,9 @@ Note the **Type** column that indicates the firmware classification (e.g., "SOAR
 5. Click **OK** on the Device dialog
    ![Device Dialog](images/img_7.png?height=300px)
 
-## Configure Fabric Device
+### Device Management
+
+#### Configure Fabric Device
 
 A blank device usually requires additional configuration:
 
@@ -217,7 +233,7 @@ A blank device usually requires additional configuration:
 - Add a disk if needed
 - Change VIPs for access ports
 
-## Install Fabric
+#### Install Fabric
 
 Once your device is configured:
 
@@ -232,7 +248,7 @@ Once your device is configured:
 
 4. If you see errors, check the device Logs section
    ![Device Logs Button](images/img_11.png?height=250px)
-
+   
    ![Device Logs](images/img_12.png?height=250px)
 
 {{% notice note %}}
@@ -241,7 +257,9 @@ Common issues include missing licenses or FortiFlex configuration
 
 ![License Error](images/img_13.png?height=250px)
 
-## Upload License to Fabric Studio
+### License Management
+
+#### Upload License to Fabric Studio
 
 1. Navigate to **Repositories > Home > Licenses**
 
@@ -258,7 +276,7 @@ Common issues include missing licenses or FortiFlex configuration
 If you don't see a device type, ensure you haven't renamed your license file. Fabric Studio uses the filename to determine the device type.
 {{% /notice %}}
 
-### Manually Assign a License
+#### Manually Assign a License
 
 If Fabric Studio isn't detecting the device type:
 
@@ -271,7 +289,9 @@ If Fabric Studio isn't detecting the device type:
 
 3. Click **OK** to save changes
 
-## Troubleshooting Device After Install
+### Troubleshooting
+
+#### Device Issues After Install
 
 If a device shows a warning exclamation mark but is "Running", it means the device is still being provisioned:
 
@@ -281,10 +301,9 @@ If a device shows a warning exclamation mark but is "Running", it means the devi
 
 2. Review logs for specific errors or completion status
 
-## Accessing a Device After Install
+#### Accessing a Device After Install
 
 To access your installed device:
 
 1. Right-click the device in the diagram or select the device row in the table
 2. Click **Access > HTTPS** (or your preferred access method)
-
