@@ -2,6 +2,7 @@
 title: "Troubleshooting"
 linkTitle: "Troubleshooting"
 weight: 50
+description: "How to solve common problems when using Fabric Studio"
 ---
 
 ## Unable to SSH to Device
@@ -24,4 +25,15 @@ To verify SSH access, there are two layers we need to validate. The first layer 
 ![img_1.png](img_1.png?height=400px)
 3. Change the **HTTPS** and **SSH** _Allowed to_ column from **Allowed & Guest** to **Any**
 
-More information is available on the Fabric Studio Docs: https://register.fabricstudio.net/docs/fabric-studio/2.0.2/security.html#ssh-access-to-device
+More information on Security Policies is available on the Fabric Studio Docs: https://register.fabricstudio.net/docs/fabric-studio/2.0.2/security.html#ssh-access-to-device
+
+
+## More troubleshooting
+
+More troubleshooting steps are available on the Fabric Studio Docs for the below issues: https://register.fabricstudio.net/docs/fabric-studio/2.0.2/troubleshooting.html
+
+- Fabric Studio Logs
+- SystemD Journal Logs
+- Sniff packets
+- Out of Space Errors
+- Failing SCP

@@ -1,8 +1,8 @@
 ---
 title: "Creating a Fabric"
 linkTitle: "Creating a Fabric"
-weight: 20
-description: "Guide to creating your first Fabric environment"
+weight: 30
+description: "Creating your first Fabric environment"
 ---
 
 ## Overview
@@ -42,6 +42,8 @@ Your first Fabric environment is now created with the following default componen
     - **FortiGate**: a shortcut to add a FortiGate device
 3. Click on **FortiGate**
 4. The FortiGate is added and automatically connected to the Management switch with an IP address in the management network
+
+More information on supported products is available [here](https://register.fabricstudio.net/docs/fabric-studio/2.0.2/supported.html#fortinet-products)
 
 ### Connect the Device
 

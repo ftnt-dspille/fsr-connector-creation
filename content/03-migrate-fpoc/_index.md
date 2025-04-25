@@ -132,6 +132,20 @@ After installation:
 3. Confirm all services are working as expected
 4. Document any issues or differences from the original FNDN environment
 
+#### IMPORTANT: Saving new Changes
+
+{{% notice style="warning" title="PLEASE READ" %}}
+Please read this section, otherwise you may end up losing hours of work and changes you make to the Fabric template
+{{% /notice %}}
+
+A Fabric template is a stateful configuration, meaning the firmware, network connections, and device config applied to the template will get provisioned on the template install. But what if you need to make changes to the device's config? If you make any device settings, IE logging into a device via CLI/GUI, you need to Backup that config so that the next time Fabric Studio does an Install, it knows what extra config can be applied.
+
+##### Preferred Method Backup Config
+
+The best option is saving the config through the **Right-Click-Device > Config & License > Backup Config**
+
+##### Less preferred: Backup Disk
+
 #### Export Fabric "Fabric"
 
 The team that manages FNDN's FortiDemo is very busy and tight on resources. So it may take some time before they can make a snapshot of the instance and save it. Since the FortiDemo spin has a countdown timer until it auto deletes, it's advised to grab an export from Fabric Studio in case you forget to extend the expiry.

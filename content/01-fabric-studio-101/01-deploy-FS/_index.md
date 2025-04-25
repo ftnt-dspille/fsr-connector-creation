@@ -2,7 +2,7 @@
 title: "Deploy Fabric Studio"
 linkTitle: "Self Host Fabric Studio"
 weight: 10
-description: "Guide for deploying Fabric Studio in your own environment"
+description: "Deploying Fabric Studio in your own environment, and Fabric Studio Licensing"
 ---
 
 ## Overview
