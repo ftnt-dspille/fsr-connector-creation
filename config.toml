@@ -20,16 +20,8 @@ title = "Fabric Studio"
 author.name = "Dylan Spille"
 # Select a color theme.
 # special
-themeVariant = [
-    "Xperts2024",
-    "Xperts2023",
-    "Spotlight",
-    "Demo",
-    "UseCase",
-    "Workshop",
-]
 # red
-# themeVariant = "Workshop"
+themeVariant = "Workshop"
 # purple
 # themeVariant = "Spotlight"
 # green
@@ -77,27 +69,6 @@ version = "v1.0.2"
 name = "<i class='fas fa-print'></i> Single Page View (for printing)"
 url = "allpages.html"
 weight = 1
-
-[[menu.shortcuts]]
-name = "<i class='fas fa-download'></i> Download Test CSV"
-url = "./chapter-02-markdown/patches/test.csv?download=true"
-weight = 5
-[[menu.shortcuts.params]]
-download = true
-
-
-[[menu.shortcuts]]
-name = "<i class='fas fa-book'></i> Hugo ReLearn Theme"
-url = "https://mcshelby.github.io/hugo-theme-relearn/"
-weight = 2
-[[menu.shortcuts]]
-name = "<i class='fas fa-book'></i> Markdown"
-url = "https://www.markdownguide.org/basic-syntax/"
-weight = 3
-[[menu.shortcuts]]
-name = "<i class='fas fa-book'></i> Hugo"
-url = "https://gohugo.io"
-weight = 4
 
 [outputs]
 home = ["HTML", "markdown"]
