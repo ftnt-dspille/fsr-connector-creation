@@ -63,7 +63,8 @@ After launching your original FortiDemo, you'll need to create a new Fabric Stud
    ![Create Demo Button](images/img_33.png?height=200px)
 4. Fill in the Demo Name and Lab Purpose fields
 5. Search for `Fabric-Studio` in the Type Dropdown. Select the first option unless you know your instance needs a large amount of CPU/RAM
-    Fabric-Studio-Empty has 40GB RAM, ~370GB Storage
+    - Fabric-Studio-Empty has 8 CPU, 40GB RAM, 365GB Storage
+    - Fabric-Studio-Empty-Big has 20 CPU, 100GB RAM, and 365GB Storage
    ![Fabric Studio Type Selection](images/img_35.png?height=400px)
 6. Click Create
 
@@ -114,6 +115,46 @@ Once everything looks ok, you can Install the demo.
 1. Click **Install**
 
 2. Wait for the devices to all install. 
+
+## Run and Test Fabric Studio
+
+After installation:
+
+1. Verify all devices are running properly
+2. Test connectivity between devices
+3. Confirm all services are working as expected
+4. Document any issues or differences from the original FNDN environment
+
+## Export Fabric Studio "Fabric"
+
+The team that manages FNDN's FortiDemo is very busy and tight on resources. So it may take some time before they can make a snapshot of the instance and save it. Since the FortiDemo spin has a countdown timer until it auto deletes, it's advised to grab an export from Fabric Studio in case you forget to extend the expiry.
+
+### TODO 
+Add pictures for exporting Fabric
+
+## Notify David Chan's Team About New Instance
+
+Once your migration is complete and tested:
+
+Obtain the **Demo Type**, **Old demo FortiPOC Dashboard URL**, and the new **Fabric Studio Dashboard URL**. 
+
+1. Send an email to David Chan's team with details about your new Fabric Studio instance
+
+- **TO**: `dchan@fortinet.com`
+- **CC**: `jhuber@fortinet.com;btrulove@fortinet.com;dspille@fortinet.com`
+- **Subject**: `Fabric Studio Migration`
+- **BODY**
+
+    ```text
+    Hello, 
+
+    We have completed the migration of FortiDemo Type "<DEMO_TYPE>" from FortiPOC to Fabric Studio.
+
+    Old FortiPOC URL: <FORTIPOC_DASHBOARD_URL>
+    New Fabric Studio URL: <FABRIC_STUDIO_DASHBOARD_URL>
+
+    Please proceed with making a new golden image for the Fabric Studio instance. 
+    ```
 
 ## Uploading Custom Images
 
@@ -247,41 +288,3 @@ To access your installed device:
 1. Right-click the device in the diagram or select the device row in the table
 2. Click **Access > HTTPS** (or your preferred access method)
 
-## Run and Test Fabric Studio
-
-After installation:
-
-1. Verify all devices are running properly
-2. Test connectivity between devices
-3. Confirm all services are working as expected
-4. Document any issues or differences from the original FNDN environment
-
-## Export Fabric Studio "Fabric"
-
-The team that manages FNDN's FortiDemo is very busy and tight on resources. So it may take some time before they can make a snapshot of the instance and save it. Since the FortiDemo spin has a countdown timer until it auto deletes, it's advised to grab an export from Fabric Studio in case you forget to extend the expiry.
-
-### TODO 
-Add pictures for exporting Fabric
-
-## Notify David Chan's Team About New Instance
-
-Once your migration is complete and tested:
-
-Obtain the Demo Type, Old demo FortiPOC Dashboard URL, and the new Fabric Studio Dashboard URL. 
-
-1. Send an email to David Chan's team with details about your new Fabric Studio instance
-
-
-**TO**: `dchan@fortinet.com`
-**CC**: `jhuber@fortinet.com;btruelove@fortinet.com;dspille@fortinet.com`
-**Subject**: `Fabric Studio Migration`
-**BODY**
-```text
-Hello, 
-
-We have completed the migration of FortiDemo Type "<DEMO_TYPE>" from FortiPOC to Fabric Studio.
-
-
-```
-
-2. Include information about the original FNDN demo that was migrated, most
