@@ -144,6 +144,8 @@ A Fabric template is a stateful configuration, meaning the firmware, network con
 
 The best option is saving the config through the **Right-Click-Device > Config & License > Backup Config**
 
+
+
 ##### Less preferred: Backup Disk
 
 #### Export Fabric "Fabric"
