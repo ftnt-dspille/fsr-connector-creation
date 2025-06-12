@@ -85,3 +85,203 @@ Example showing how to download a fpoc export from Fabric studio to your downloa
 admin@dspille-fabric-studio-soar3.fortidemo.fortinet.com's password:
 fortisoar-fs-5-28-25.fpoc                                                                                                 100%  894MB   3.3MB/s   04:33
 ```
+
+# VM Access Management Guide
+
+## Overview
+VM access controls how you can connect to virtual machines in your fabric. This guide covers viewing existing access methods and creating new ones.
+
+## Command Structure
+All VM access commands follow this pattern:
+```bash
+model vm access <action> [options] [arguments]
+```
+
+## Available Access Types
+- **SERIAL** - Serial console access
+- **SSH** - Secure Shell access (port 22)
+- **HTTP** - Web access (port 80)
+- **HTTPS** - Secure web access (port 443)
+- **SPICE** - Remote desktop protocol
+- **VNC** - Virtual Network Computing remote desktop
+
+## Access Modes
+- **PRIVATE** - Internal network access only
+- **PUBLIC** - External network access (use with caution)
+
+---
+
+## Viewing VM Access
+
+### 1. List All VMs in a Fabric
+```bash
+model fabric vm list <fabric_id>
+```
+**Example:**
+```bash
+model fabric vm list 4
+```
+
+### 2. View All VM Access Entries
+```bash
+model vm access list
+```
+
+### 3. View Access for Specific VM
+```bash
+model vm access list --select "vm=<vm_id>"
+```
+**Example:**
+```bash
+model vm access list --select "vm=67"
+```
+
+### 4. Get Detailed Access Information
+```bash
+model vm access detail <access_id>
+```
+**Example:**
+```bash
+model vm access detail 50
+```
+
+### 5. Additional List Options
+```bash
+# With pagination
+model vm access list --limit 10 --page 1
+
+# With ordering
+model vm access list --order-by vm,type
+
+# With related fields
+model vm access list --related-fields vm,fabric
+```
+
+---
+
+## Creating VM Access
+
+### Basic Syntax
+```bash
+model vm access create '<json_object>'
+```
+
+### JSON Object Structure
+```json
+{
+    "vm": <vm_id>,
+    "type": "<access_type>",
+    "mode": "<access_mode>",
+    "name": "<descriptive_name>",
+    "dport": <port_number>
+}
+```
+
+### Common Access Creation Examples
+
+#### SSH Access
+```bash
+model vm access create '{"vm": 67, "type": "SSH", "mode": "PRIVATE", "name": "SSH", "dport": 22}'
+```
+
+#### HTTP Access
+```bash
+model vm access create '{"vm": 67, "type": "HTTP", "mode": "PRIVATE", "name": "HTTP", "dport": 80}'
+```
+
+#### HTTPS Access
+```bash
+model vm access create '{"vm": 67, "type": "HTTPS", "mode": "PRIVATE", "name": "HTTPS", "dport": 443}'
+```
+
+#### Serial Console Access
+```bash
+model vm access create '{"vm": 67, "type": "SERIAL", "mode": "PRIVATE", "name": "SERIAL", "dport": 0}'
+```
+
+#### SPICE Remote Desktop
+```bash
+model vm access create '{"vm": 67, "type": "SPICE", "mode": "PRIVATE", "name": "SPICE", "dport": 0}'
+```
+
+#### VNC Remote Desktop
+```bash
+model vm access create '{"vm": 67, "type": "VNC", "mode": "PRIVATE", "name": "VNC", "dport": 0}'
+```
+
+### Descriptive Naming Convention
+For consistency with existing entries, use descriptive names:
+```bash
+model vm access create '{"vm": 67, "type": "HTTPS", "mode": "PRIVATE", "name": "Default HTTPS PRIVATE access to Ubuntu-Cloud", "dport": 443}'
+```
+
+---
+
+## Deleting VM Access
+
+### Delete Access Entry
+```bash
+model vm access delete <access_id>
+```
+
+### Interactive Deletion
+```bash
+model vm access delete <access_id> --interactive
+```
+
+### Force Deletion (no confirmation)
+```bash
+model vm access delete <access_id> --yes
+```
+
+---
+
+## Complete Workflow Example
+
+### Step 1: Find Your VM
+```bash
+# List all VMs in fabric 4
+model fabric vm list 4
+
+# Output shows:
+# 67 BASIC:Ubuntu-Cloud
+```
+
+### Step 2: Check Existing Access
+```bash
+# Check current access for VM 67
+model vm access list --select "vm=67"
+
+# Output shows:
+# 226 Default VNC PRIVATE access to Ubuntu-Cloud
+# 227 Default SPICE PRIVATE access to Ubuntu-Cloud
+```
+
+### Step 3: Add New Access
+```bash
+# Add HTTPS access
+model vm access create '{"vm": 67, "type": "HTTPS", "mode": "PRIVATE", "name": "Default HTTPS PRIVATE access to Ubuntu-Cloud", "dport": 443}'
+
+# Add SSH access
+model vm access create '{"vm": 67, "type": "SSH", "mode": "PRIVATE", "name": "Default SSH PRIVATE access to Ubuntu-Cloud", "dport": 22}'
+```
+
+### Step 4: Verify Creation
+```bash
+# Check access again
+model vm access list --select "vm=67"
+
+# Should now show all access methods including new ones
+```
+
+### Step 5: Apply changes to Fabric
+Open your Fabric and Sync the change to the device
+![img.png](sync_access.png)
+---
+
+## JSON Mode
+
+Enable JSON output for programmatic processing:
+```bash
+cli json enable
+```
