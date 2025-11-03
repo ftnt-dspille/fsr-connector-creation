@@ -115,7 +115,7 @@ In some cases, firmware for certain devices might not be found. This often happe
 
 #### Migrate Firmware if Needed
 
-In some cases, you may want to reuse firmware images from another Fabric Studio instance instead of re-uploading them. When the **source system (System A)** resides in a private lab and the **destination (System B)** is reachable over the internet, it’s safer to **run `rsync` from System A** to push the firmware files to System B.
+In some cases, you may want to reuse firmware images from another Fabric Studio instance instead of re-uploading them. When the **source system (System A)** resides in a private lab and the **destination (System B)** is reachable over the internet, you can **run `rsync` from System A** to push the firmware files to System B.
 
 ##### Prerequisites
 
@@ -164,7 +164,7 @@ In some cases, you may want to reuse firmware images from another Fabric Studio 
    ![alt text](after_rsync_b.png)
 
 {{% notice note %}}
-You can safely repeat the `rsync` command from **System A** to keep firmware directories synchronized. Avoid using `--delete` to prevent removing files that exist only on the destination.
+You can repeat the `rsync` command from **System A** to keep firmware directories synchronized. Avoid using `--delete` to prevent removing files that exist only on the destination.
 {{% /notice %}}
 
 #### Sync the Home Firmware Repository
