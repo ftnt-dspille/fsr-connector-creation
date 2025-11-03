@@ -17,7 +17,7 @@
     --PRIMARY-color: rgb(var(--theme-color)) !important;
     --MAIN-BG-color: rgb(var(--fortinet-white)) !important;
     --MAIN-TEXT-color: rgb(var(--fortinet-black)) !important;
-    --MAIN-font: inter, sans-serif;
+    --MAIN-font: Inter, sans-serif;
 
     --MAIN-LINK-color: #1c90f3 !important;
     /* << blue; >> red#f31c1c; /* Color of links */
@@ -74,7 +74,14 @@
     --SWAGGER-theme: light;
     /* name of the default Swagger theme for this variant, can be overridden in config.toml */
   }
-
+  @font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 100 1000;
+    font-stretch: 100%;
+    font-display: swap;
+    src: url('/fonts/Inter-V.ttf');
+  }
   ::placeholder {
     /* Chrome, Firefox, Opera, Safari 10.1+ */
     color: rgb(var(--fortinet-white)) !important;
@@ -168,8 +175,6 @@
     }
   }
 </style>
-
-<link rel="stylesheet" href="css/fonts.css" />
 
 <script>
 function setThemeMode() {
@@ -308,43 +313,22 @@ setThemeMode()
   rel="stylesheet"
   href="https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.4/tiny-slider.css" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.2/min/tiny-slider.js"></script>
-
+<!-- mermaid logo icons -->
+<script>
+  document.addEventListener('DOMContentLoaded', function (event) {
+    mermaid.registerIconPacks([
+      {
+        name: 'logos',
+        loader: () =>
+          fetch('https://unpkg.com/@iconify-json/logos@1/icons.json').then(
+            (res) => res.json(),
+          ),
+      },
+    ])
+  })
+</script>
 {{ if templates.Exists "partials/google_analytics_tag.html" }}
   {{ partial
     "google_analytics_tag.html" .
   }}
 {{ end }}
-{{ $menus := .Site.Menus.shortcuts }}
-<script>
-// Pass menu data to JavaScript
-
-document.addEventListener('DOMContentLoaded', function () {
-  const pattern = /\s*<[^>]+>\s*/g
-  const menuData = {{ $menus | jsonify | safeJS
-  }} || [];
-  let downloads = []
-  for (let item of menuData) {
-    if (item?.Params?.download === true) {
-      downloads.push({ url: item.URL, text: item.Name.replace(pattern, '') })
-    }
-  }
-  if (downloads.length == 0) {
-    return
-  }
-  // Find all shortcut menu links
-  const menuItems = document.querySelectorAll('#R-shortcutmenu-shortcuts a');
-  menuItems.forEach((link, index) => {
-    const text = link.innerHTML.replace(pattern, '')
-    const href = link.getAttribute('href');
-    // Find the matching menu item by both URL and Name
-    const matchingMenuItem = downloads.find(download => {
-      return href.endsWith(download.url) && text === download.text;
-    });
-
-    // Only add download attribute if this specific menu item has download: true
-    if (matchingMenuItem) {
-      link.setAttribute('download', '');
-    }
-  });
-});
-</script>
