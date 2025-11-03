@@ -69,9 +69,9 @@ After launching your original FortiDemo, you'll need to create a new Fabric Stud
    ![Create Demo Button](images/img_33.png?height=200px)
 4. Fill in the Demo Name and Lab Purpose fields
 5. Search for `Fabric-Studio` in the Type Dropdown. Select the first option unless you know your instance needs a large amount of CPU/RAM
-    - Fabric-Studio-Empty has 8 CPU, 40GB RAM, 365GB Storage
-    - Fabric-Studio-Empty-Big has 20 CPU, 100GB RAM, and 365GB Storage
-      ![Fabric Studio Type Selection](images/img_35.png?height=400px)
+   - Fabric-Studio-Empty has 8 CPU, 40GB RAM, 365GB Storage
+   - Fabric-Studio-Empty-Big has 20 CPU, 100GB RAM, and 365GB Storage
+     ![Fabric Studio Type Selection](images/img_35.png?height=400px)
 6. Click Create
 
 Wait until the Fabric Studio demo is ready.
@@ -113,6 +113,67 @@ In some cases, firmware for certain devices might not be found. This often happe
 ![img_40.png](images/img_40.png?height=500px)
 {{% /notice %}}
 
+#### Migrate Firmware if Needed
+
+In some cases, you may want to reuse firmware images from another Fabric Studio instance instead of re-uploading them. When the **source system (System A)** resides in a private lab and the **destination (System B)** is reachable over the internet, it’s safer to **run `rsync` from System A** to push the firmware files to System B.
+
+##### Prerequisites
+
+- Both instances must be on the same firmware version.
+- Admin credentials and IPs/hostnames for both systems.
+- SSH access from **System A → System B** (outbound allowed).
+
+##### Steps
+
+1. **On the source Fabric Studio (System A)**, open the CLI and navigate to the firmware directory:
+
+   ```bash
+   system repository home shell
+   cd firmwares
+   ```
+
+2. **Perform a dry-run** to preview the files that would be transferred:
+
+   ```bash
+   rsync -avzn --progress --exclude 'Package.xml*' ./ admin@<DEST_HOST>:firmwares/
+   ```
+
+   ![alt text](dry_run.png)
+
+3. **Run the actual transfer** once verified:
+
+   ```bash
+   rsync -avz --progress --exclude 'Package.xml*' ./ admin@<DEST_HOST>:firmwares/
+   ```
+
+   _Example:_
+
+   ```bash
+   rsync -avz --progress --exclude 'Package.xml*' ./ admin@dspille-fabric-studio-dest.fortidemo.fortinet.com:firmwares/
+   ```
+
+4. **On the destination Fabric Studio (System B)**, verify the results:
+
+   ```bash
+   system repository home shell
+   cd firmwares
+   ls -lh
+   ```
+
+   Confirm all `.qcow2` and `.zip` firmware files are present, and `Package.xml` / `Package.xml.gz` remain unchanged.
+   ![alt text](after_rsync_b.png)
+
+{{% notice note %}}
+You can safely repeat the `rsync` command from **System A** to keep firmware directories synchronized. Avoid using `--delete` to prevent removing files that exist only on the destination.
+{{% /notice %}}
+
+#### Sync the Home Firmware Repository
+
+1. Navigate to **Repositories > Home > Firmwares**
+2. Click the **Sync** button to refresh the firmware list
+3. Confirm all required firmware is now available
+   ![alt text](firmware_after_sync_b.png)
+
 ### 4. Install and Test
 
 #### Run Fabric Demo
@@ -144,8 +205,6 @@ A Fabric template is a stateful configuration, meaning the firmware, network con
 
 The best option is saving the config through the **Right-Click-Device > Config & License > Backup Config**
 
-
-
 ##### Less preferred: Backup Disk
 
 #### Export Fabric "Fabric"
@@ -170,17 +229,17 @@ Obtain the **Demo Type**, **Old demo FortiPOC Dashboard URL**, and the new **Fab
 - **CC**: `jhuber@fortinet.com;btrulove@fortinet.com;dspille@fortinet.com`
 - **Subject**: `Fabric Studio Migration`
 - **BODY**
-  
-    ```text
-    Hello, 
 
-    We have completed the migration of FortiDemo Type "<DEMO_TYPE>" from FortiPOC to Fabric Studio.
+  ```text
+  Hello,
 
-    Old FortiPOC URL: <FORTIPOC_DASHBOARD_URL>
-    New Fabric Studio URL: <FABRIC_STUDIO_DASHBOARD_URL>
+  We have completed the migration of FortiDemo Type "<DEMO_TYPE>" from FortiPOC to Fabric Studio.
 
-    Please proceed with making a new golden image for the Fabric Studio instance. 
-    ```
+  Old FortiPOC URL: <FORTIPOC_DASHBOARD_URL>
+  New Fabric Studio URL: <FABRIC_STUDIO_DASHBOARD_URL>
+
+  Please proceed with making a new golden image for the Fabric Studio instance.
+  ```
 
 ## Advanced Operations
 
@@ -264,7 +323,7 @@ Once your device is configured:
 
 4. If you see errors, check the device Logs section
    ![Device Logs Button](images/img_11.png?height=250px)
-   
+
    ![Device Logs](images/img_12.png?height=250px)
 
 {{% notice note %}}
