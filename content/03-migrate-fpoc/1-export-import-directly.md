@@ -108,7 +108,7 @@ You should now see the Fabric Studio Dashboard
 5. Confirm that everything looks correct and that all devices were imported properly
 
 {{% notice warning %}}
-In some cases, firmware for certain devices might not be found. This often happens when devices were using snapshots, which are not exportable from FortiDemo. You may need to manually upload firmware for these devices.
+In some cases, firmware for certain devices might not be found. This often happens when devices were using snapshots or custom firmware, which are not exportable from FortiDemo. You may need to manually upload firmware for these devices, or follow the migration steps outlined in the next section.
 
 ![img_40.png](images/img_40.png?height=500px)
 {{% /notice %}}

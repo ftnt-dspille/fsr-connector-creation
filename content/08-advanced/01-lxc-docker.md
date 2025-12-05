@@ -1,9 +1,13 @@
 ---
 title: "LXC Auto-Start Setup Guide"
-linkTitle: "LXC Auto-Start Setup"
+linkTitle: "LXC Docker Auto-Start Setup (FortiPOC)"
 description: "Guide to setting up automatic Docker container startup in LXC with Fabric Studio"
-weight: 60
+weight: 20
 ---
+
+{{% notice warning %}}
+Keep in mind that /fortipoc and postinst will be deprecated in future versions of Fabric Studio. It is recommended to transition to using /fabric for all custom scripts and data storage.
+{{% /notice %}}
 
 This guide shows how to set up a "simple" auto-start system using Fabric's **/fabric/init** and **/fortipoc/postinst** to automatically install Docker and run a web server container.
 
