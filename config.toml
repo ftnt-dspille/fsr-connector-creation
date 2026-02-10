@@ -13,7 +13,7 @@ enableEmoji = true
 
 ################################ BEGIN EDITING ################################
 # Display Title of the project
-title = "Fabric Studio"
+title = "FortiSOAR Connector Building"
 
 [params]
 # Author of the site, will be used in meta information
@@ -30,9 +30,9 @@ themeVariant = "Workshop"
 # themeVariant = "UseCase"
 
 # The banner text under Fortinet logo on the top left of the project. Better to be short.
-logoBannerText = "Fabric Studio"
+logoBannerText = "FSR Connector Building"
 # Small text under the title
-logoBannerSubText = "Internal Only"
+logoBannerSubText = "Internal/External"
 ################################# END EDITING #################################
 
 
