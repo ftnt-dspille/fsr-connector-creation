@@ -2,64 +2,39 @@
 title: "Ways to Build Connectors"
 linkTitle: "Ways to Build Connectors"
 weight: 20
-description: "Description"
+description: "Connector development options in FortiSOAR"
 ---
 
-# TODO
-continue this page
+FortiSOAR provides two primary ways to build connectors. Both have the same result in generating a connector, but they are optimized for different use cases.
 
-FortiSOAR offers two development approaches, each with different trade-offs:
+## Connector Wizard (UI-based)
 
-### Method 1: Connector Wizard
+The Connector Wizard is a guided, in-product designed to help users quickly create and test connectors directly within FortiSOAR. It is best suited for learning, prototyping, and straightforward REST integrations.
+![img.png](connector_wizard.png?height=500px)
 
-**Best for:** Quick prototypes, simple REST APIs, starting out with connectors
+## FortiSOAR RDK (PyCharm Plugin)
 
-**Process:**
+The FortiSOAR RDK enables full local development of connectors using PyCharm. This workflow is intended for production-grade connectors that require complex logic, faster development iteration cycles, and stronger version control.
+![img.png](create_connector_rdk_step1.png)
+## Comparison
 
-1. Open FortiSOAR
-2. Navigate to Content Hub > Create > New Connector
-3. Fill out UI forms for metadata, configuration, and actions
-4. Use web editor for code customization
-5. Publish directly from the UI
-
-**Advantages:**
-
-- No local development environment needed
-- Testing in FortiSOAR
-
-**Disadvantages:**
-
-- Not ideal for complex logic
-- Harder to version control
-- Less suitable for team development
-
-### Method 2: FortiSOAR RDK (PyCharm Plugin)
-
-**Best for:** Professional development, team projects, complex connectors
-
-**Process:**
-
-1. Install RDK plugin in PyCharm
-2. Create or import connector
-3. Use IDE features (IntelliSense, debugging)
-4. Test directly from PyCharm
-5. Export when ready
-
-**Advantages:**
-
-- Full IDE capabilities (autocomplete, debugging, refactoring)
-- Built-in testing and validation
-- Best for maintaining large connectors
-- Ability to use local AI agents for faster building (Bring your own AI required)
-
-**Disadvantages:**
-
-- Requires PyCharm (version 2024.1 or later)
-- Pycharm learning curve
-- Additional setup required
-
-**For this workshop**, we'll use the Connector Wizard to understand the fundamentals and introduce the Pycharm Concepts.
+| Category                  | Connector Wizard                         | FortiSOAR RDK                  |
+|:--------------------------|------------------------------------------|--------------------------------|
+| Primary use               | Prototyping, simple integrations         | Production, complex connectors |
+| Development environment   | FortiSOAR UI                             | Local IDE (PyCharm 2024.1+)    |
+| Code editing              | Web editor                               | Full IDE                       |
+| Debugging                 | None                                     | Full debugging                 |
+| Code complexity           | Low–moderate                             | Moderate–high                  |
+| Version control           | Manual / export-based                    | Native Git                     |
+| Team collaboration        | Limited                                  | Strong                         |
+| Testing                   | In-instance                              | IDE-driven                     |
+| AI-assisted development   | FortiAI for new connectors, not existing | Supported (BYO AI)             |
+| Setup effort              | Minimal                                  | Moderate                       |
+| Long-term maintainability | Limited                                  | High                           |
 
 {{% notice note %}}
-You can switch between methods! Start with the Wizard to generate boilerplate, then export and continue manually if you need more control.
+These approaches are **not mutually exclusive**. You can start with the Wizard to create a connector, and then import it into the RDK for full development capabilities. Or vice versa.
 {{% /notice %}}
+
+You will get to use both approaches in this workshop. 
+

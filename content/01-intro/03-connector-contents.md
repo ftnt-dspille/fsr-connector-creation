@@ -1,6 +1,6 @@
 ---
-title: "Connector Contents"
-linkTitle: "Connector Contents"
+title: "Connector Contents Simplified"
+linkTitle: "Connector Contents - Simple"
 weight: 30
 description: "Description"
 ---
@@ -10,9 +10,9 @@ continue this page
 
 ## Common Connector Components
 
-Most connectors follow these established patterns:
+Most connectors follow these 
 
-### Configuration Pattern
+### Configuration
 
 - Store reusable connection details (URL, credentials)
 - Multiple configurations per connector (dev, prod, different regions)
