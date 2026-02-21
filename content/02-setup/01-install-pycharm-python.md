@@ -132,7 +132,7 @@ Now let's create a project using PyCharm's built-in wizard, configured to use **
 3. In the **New Project** dialog, configure the following:
    
    | Setting              | Value                                                                       |
-   |----------------------|-----------------------------------------------------------------------------|
+                     |----------------------|-----------------------------------------------------------------------------|
    | **Project type**     | Select **Pure Python** from the left sidebar.                               |
    | **Location**         | Choose where to save your project (e.g., `PycharmProjects/MyFirstProject`). |
    | **Interpreter type** | Click **uv**.                                                               |
@@ -145,14 +145,25 @@ Now let's create a project using PyCharm's built-in wizard, configured to use **
    You'll see a note confirming that a uv environment will be created in the project root (`.venv`).
 
 4. Optionally check **Create Git repository** if you want version control from the start.
-    ![img.png](pycharm_project_confirmation.png)
+   ![img.png](pycharm_project_confirmation.png)
 5. Click **Create**.
 
-## TODO (Finish this)
+After 15-20 seconds, you'll see a project window open in PyCharm with a .venv/ and a pyproject.toml
+
+![img.png](myFirstProject.png)
+
 ### Run a test script
 
 1. In the PyCharm project explorer, right-click the project root and select **New → Python File**. Name it `hello.py`.
-2. Add the following code:
+   ![img.png](add_new_python_file.png)
+   ![img.png](helloy_py.png)
+2. If you get a popup about adding the file to git, click **Add**
+   ![img.png](add_to_git.png)
+   {{% notice note %}}
+   Git is not in the scope of this workshop, but it's a great way to version control your code. This simply means you can track and save changes to your code over time, share code and collaborate with others, and easily revert to previous versions if needed.
+   {{% /notice %}}
+
+2. Add the following code to `hello.py`:
    
    ```python
    import sys
@@ -165,13 +176,37 @@ Now let's create a project using PyCharm's built-in wizard, configured to use **
    if __name__ == "__main__":
        main()
    ```
+3. Your pycharm should look like this
+   ![img.png](pyhcarm_with_hello_py.png)
 
-3. Right-click the file in the editor and select **Run 'hello'**, or press `Ctrl+Shift+F10` (Windows) / `Ctrl+Shift+R` (macOS).
+#### Execute Python code
 
-You should see output similar to:
+##### Option 1
+
+1. Right-click the file in the editor and select **Run 'hello'**, or press `Ctrl+Shift+F10` (Windows) / `Ctrl+Shift+R` (macOS).
+   ![img.png](right_click_run_python.png)
+
+##### Option 2
+
+1. Find the **Run** button in the toolbar and click it.
+   ![img.png](run_python_button.png)
+
+##### Option 3
+
+1. Open the terminal **inside** Pycharm. The icon is in the bottom left corner.
+   ![img.png](img.png)
+2. Type `uv run hello.py` and click Enter.
+
+#### Find the output
+
+You should see output at the bottom of the window similar to:
 
 ```text
 Hello from PyCharm!
 Python version: 3.12.x (main, ...) [...]
 Your environment is set up correctly.
 ```
+
+![img.png](example_pycharm_output.png)
+
+Congrats on setting up PyCharm and Python! You now have a working environment to start your Python journey.

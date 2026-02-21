@@ -1,8 +1,15 @@
+---
+title: Interactivity Enhancement Guide
+linkTitle: Interactivity Enhancement Guide
+weight: 100
+---
+
 # FortiSOAR Connector Workshop - Interactivity Enhancement Guide
 
 ## Current State Analysis
 
 Your workshop currently has:
+
 - ✅ Good conceptual content
 - ✅ Clear explanations
 - ✅ Some practice exercises
@@ -21,6 +28,7 @@ Transform from **"follow along"** to **"figure it out"** with appropriate scaffo
 ## 1. Add Mini-Challenges Throughout Conceptual Sections
 
 ### Current Problem
+
 Your introduction and architecture modules are pure lecture. Users read for 30+ minutes before touching code.
 
 ### Solution: Insert Micro-Exercises Every 5-10 Minutes
@@ -41,6 +49,7 @@ Let's examine an actual FortiSOAR connector to see these concepts in action.
 
 **Your Task (5 minutes):**
 Examine the exported connector and find:
+
 - [ ] Where is the connector name defined?
 - [ ] How many operations does it have?
 - [ ] What authentication method does it use?
@@ -57,7 +66,7 @@ Examine the exported connector and find:
 **Key Observation:** Real connectors follow the same pattern you're learning!
 {{% /expand %}}
 
-**Discussion Question:** 
+**Discussion Question:**
 What surprised you about the connector structure? Share one insight you gained.
 ```
 
@@ -72,12 +81,14 @@ Here's a connector execution log from a failed operation. Your job is to underst
 
 **Log Output:**
 ```
+
 2024-01-25 10:45:23 INFO threat-intel Executing operation: get_ip_reputation
 2024-01-25 10:45:23 DEBUG threat-intel Config: {'server_url': 'https://api.example.com', 'api_key': '***'}
 2024-01-25 10:45:23 DEBUG threat-intel Params: {'ip_address': '192.168.1.1'}
 2024-01-25 10:45:23 INFO threat-intel Making API request to: https://api.example.com/v1/ip/192.168.1.1
 2024-01-25 10:45:25 ERROR threat-intel API returned status 401
 2024-01-25 10:45:25 ERROR threat-intel Operation get_ip_reputation failed: Authentication failed
+
 ```
 
 **Questions:**
@@ -101,6 +112,7 @@ Here's a connector execution log from a failed operation. Your job is to underst
 ## 2. Add "Broken Code" Debugging Exercises
 
 ### Why This Works
+
 Learning by fixing mistakes is more engaging than following perfect examples.
 
 ### Example for 10-python-primer.md
@@ -131,6 +143,7 @@ def check_ip_reputation(config, params):
 ```
 
 **Test Cases:**
+
 - What happens if `ip_address` is missing from params?
 - What if the API returns an error?
 - What if you need the full response data, not just status?
@@ -139,6 +152,7 @@ def check_ip_reputation(config, params):
 **Problem:** Using `params['ip_address']` throws KeyError if the field is missing.
 
 **Fix:**
+
 ```python
 ip = params.get('ip_address')
 if not ip:
@@ -150,11 +164,13 @@ if not ip:
 
 {{% expand "Bug #2 - Click to see the issue" %}}
 **Problem:** Accessing `response.json()['score']` directly will crash if:
+
 - The API returns an error
 - The response doesn't have a 'score' field
 - The response isn't JSON
 
 **Fix:**
+
 ```python
 response.raise_for_status()  # Raises error for 4xx/5xx
 data = response.json()
@@ -168,6 +184,7 @@ score = data.get('score', 0)  # Safe access with default
 **Problem:** Returning inconsistent data types (`dict` vs `string`)
 
 **Fix:**
+
 ```python
 return {
     'status': 'malicious' if score > 70 else 'clean',
@@ -180,6 +197,7 @@ return {
 {{% /expand %}}
 
 **Bonus Challenge:** Add proper timeout handling and logging to this function.
+
 ```
 
 ---
@@ -207,16 +225,19 @@ curl http://ip-api.com/json/8.8.8.8
 ```
 
 2. Try with an invalid IP:
+
 ```bash
 curl http://ip-api.com/json/999.999.999.999
 ```
 
 3. Test with different fields:
+
 ```bash
 curl "http://ip-api.com/json/8.8.8.8?fields=status,country,city,isp"
 ```
 
 **Questions to Answer:**
+
 - What status code does a successful request return?
 - What happens with an invalid IP?
 - What fields are available in the response?
@@ -253,6 +274,7 @@ Based on your testing, list 3-5 error scenarios your connector needs to handle:
 5. _______________________
 
 This planning will help when you write your `operations.py` file!
+
 ```
 
 ---
@@ -319,51 +341,57 @@ def get_ip_location(config, params):
 ### Hints Available
 
 {{% expand "Hint #1 - Extracting IP Address" %}}
+
 ```python
 ip_address = params.get('ip_address')
 if not ip_address:
     raise ConnectorError('IP address is required')
 ```
+
 {{% /expand %}}
 
 {{% expand "Hint #2 - Building URL" %}}
+
 ```python
 server_url = config.get('server_url', 'http://ip-api.com')
 url = f"{server_url}/json/{ip_address}"
 ```
+
 {{% /expand %}}
 
 {{% expand "Full Solution - Only if you're stuck!" %}}
+
 ```python
 import requests
 from connectors.core.connector import ConnectorError
 
+
 def get_ip_location(config, params):
     """Get geolocation data for an IP address"""
-    
+
     try:
         # Extract IP address
         ip_address = params.get('ip_address')
         if not ip_address:
             raise ConnectorError('IP address is required')
-        
+
         # Build URL
         server_url = config.get('server_url', 'http://ip-api.com')
         url = f"{server_url}/json/{ip_address}"
-        
+
         # Make request
         response = requests.get(url, timeout=30)
         response.raise_for_status()
-        
+
         # Parse response
         data = response.json()
-        
+
         # Check for API-level errors
         if data.get('status') != 'success':
             raise ConnectorError(
                 f"IP lookup failed: {data.get('message', 'Unknown error')}"
             )
-        
+
         # Normalize response
         return {
             'status': 'success',
@@ -377,16 +405,17 @@ def get_ip_location(config, params):
             'longitude': data.get('lon'),
             'timezone': data.get('timezone')
         }
-        
+
     except requests.exceptions.Timeout:
         raise ConnectorError('Request timed out. The service may be unavailable.')
-    
+
     except requests.exceptions.ConnectionError:
         raise ConnectorError('Cannot connect to IP-API service. Check network connectivity.')
-    
+
     except Exception as e:
         raise ConnectorError(f'Location lookup failed: {str(e)}')
 ```
+
 {{% /expand %}}
 
 ### Test Your Code
@@ -404,10 +433,12 @@ print(result)
 ```
 
 **Verification:**
+
 - [ ] Function runs without errors
 - [ ] Result includes all expected fields
 - [ ] Error handling works (try invalid IP)
 - [ ] Timeout handling works (use fake URL)
+
 ```
 
 ---
@@ -460,6 +491,7 @@ Track points for:
 ### Activity: Code Review Buddy System
 
 **Phase 1: Build (15 minutes)**
+
 - Person A: Build the IP geolocation connector
 - Person B: Build a similar connector for a different service (example: weather API)
 
@@ -467,6 +499,7 @@ Track points for:
 Switch computers and review each other's code:
 
 **Review Checklist:**
+
 - [ ] Does info.json have all required fields?
 - [ ] Is input validation present?
 - [ ] Are errors handled properly?
@@ -475,6 +508,7 @@ Switch computers and review each other's code:
 - [ ] Are there any potential bugs?
 
 **Phase 3: Discuss (5 minutes)**
+
 - Share one thing done well
 - Suggest one improvement
 - Discuss one challenge you both faced
@@ -505,7 +539,8 @@ ___________________________________________________
 ### The Problem
 
 The connector imports successfully, but when testing:
-- Health check shows "Disconnected" 
+
+- Health check shows "Disconnected"
 - Operations fail with timeout errors
 - Logs show: `ConnectionError: [Errno 111] Connection refused`
 
@@ -522,6 +557,7 @@ def check_health(self, config):
 ```
 
 ### Their configuration in FortiSOAR:
+
 - Server URL: `api.example.com`
 - API Key: `valid-key-here`
 
@@ -533,6 +569,7 @@ def check_health(self, config):
 4. **Explain to Colleague** - How would you explain what was wrong?
 
 ### Hints
+
 {{% expand "Hint #1: Look at the URL" %}}
 The server URL is missing something important. What protocol should be there?
 {{% /expand %}}
@@ -550,16 +587,19 @@ The health check returns `False` on any error. This hides the real problem from 
 {{% expand "Click to see the diagnosis and fix" %}}
 
 **Problems Found:**
+
 1. **Critical:** Server URL missing `https://` protocol
 2. **Major:** Health check swallows all errors with generic `False`
 3. **Minor:** Direct dictionary access `config['server_url']` will crash if field missing
 
 **Priority:**
+
 1. Add protocol to URL (fixes immediate connection issue)
 2. Improve error reporting (helps with future debugging)
 3. Add validation (prevents future crashes)
 
 **Fixed Code:**
+
 ```python
 def check_health(self, config):
     """Test connector configuration"""
@@ -568,25 +608,25 @@ def check_health(self, config):
         server_url = config.get('server_url')
         if not server_url:
             raise ConnectorError('Server URL is required')
-        
+
         # Ensure URL has protocol
         if not server_url.startswith(('http://', 'https://')):
             server_url = f"https://{server_url}"
-        
+
         # Test connection
         response = requests.get(
             f"{server_url}/health",
             timeout=5,
             headers={'X-API-Key': config.get('api_key')}
         )
-        
+
         if response.status_code == 200:
             return True
         else:
             raise ConnectorError(
                 f'Health check failed: Server returned {response.status_code}'
             )
-    
+
     except requests.exceptions.Timeout:
         raise ConnectorError('Connection timed out. Check the server URL.')
     except requests.exceptions.ConnectionError as e:
@@ -596,13 +636,16 @@ def check_health(self, config):
 ```
 
 **Explanation for Colleague:**
-"The main issue was the URL format. FortiSOAR needs the full URL with `https://`. Also, by returning just `False`, you couldn't see what was actually wrong. The new version gives specific error messages so you know exactly what to fix. Plus, it validates the config first so you catch problems earlier."
+"The main issue was the URL format. FortiSOAR needs the full URL with `https://`. Also, by returning just
+`False`, you couldn't see what was actually wrong. The new version gives specific error messages so you know exactly what to fix. Plus, it validates the config first so you catch problems earlier."
 
 **Key Lesson:** Always provide actionable error messages. "Disconnected" is frustrating; "Server URL must start with https://" is helpful.
 {{% /expand %}}
 
 ### Bonus Challenge
+
 The connector works now, but the colleague wants to support both HTTP and HTTPS. How would you modify the code to auto-detect or allow users to choose?
+
 ```
 
 ---
@@ -679,16 +722,19 @@ raise ConnectorError(
 ```
 
 **Clever Pattern:**
+
 ```python
 # They loop through multiple indicator types elegantly
 for indicator_type in ['ip', 'domain', 'file']:
     result = self._check_indicator(indicator_type, value)
 ```
+
 {{% /expand %}}
 
 ### Apply Your Learning
 
 Choose **one** pattern you discovered and implement it in your own connector.
+
 ```
 
 ---
@@ -724,19 +770,24 @@ result = get_ip_location(config, {'ip_address': 'invalid'})
 # Test timeout (use bad URL)
 result = get_ip_location(config, {'ip_address': '1.1.1.1'})
 ```
+
 {{% /expand %}}
 
 ### Level 3: Input Validation (10 points)
+
 **Challenge:** Validate IP format before making API calls
 
 Requirements:
+
 - Check if IP is valid IPv4 or IPv6 format
 - Reject private IPs (192.168.x.x, 10.x.x.x)
 - Provide helpful error messages
 
 {{% expand "Hint: Use regex or ipaddress module" %}}
+
 ```python
 import ipaddress
+
 
 def validate_ip(ip_string):
     try:
@@ -747,18 +798,22 @@ def validate_ip(ip_string):
     except ValueError:
         raise ConnectorError(f'Invalid IP address format: {ip_string}')
 ```
+
 {{% /expand %}}
 
 ### Level 4: Batch Processing (15 points)
+
 **Challenge:** Add support for multiple IPs at once
 
 Requirements:
+
 - Accept comma-separated list of IPs
 - Process each IP
 - Return array of results
 - Handle partial failures gracefully
 
 **Expected Input:**
+
 ```json
 {
   "ip_addresses": "8.8.8.8, 1.1.1.1, 9.9.9.9"
@@ -766,12 +821,25 @@ Requirements:
 ```
 
 **Expected Output:**
+
 ```json
 {
   "results": [
-    {"ip": "8.8.8.8", "country": "United States", ...},
-    {"ip": "1.1.1.1", "country": "Australia", ...},
-    {"ip": "9.9.9.9", "country": "United States", ...}
+    {
+      "ip": "8.8.8.8",
+      "country": "United States",
+      ...
+    },
+    {
+      "ip": "1.1.1.1",
+      "country": "Australia",
+      ...
+    },
+    {
+      "ip": "9.9.9.9",
+      "country": "United States",
+      ...
+    }
   ],
   "success_count": 3,
   "failure_count": 0
@@ -779,18 +847,22 @@ Requirements:
 ```
 
 ### Level 5: Caching (20 points)
+
 **Challenge:** Avoid repeated API calls for same IP
 
 Requirements:
+
 - Cache results in memory
 - Expire cache after 1 hour
 - Add cache hit/miss statistics
 
 {{% expand "Hint: Use Python dictionary with timestamps" %}}
+
 ```python
 from datetime import datetime, timedelta
 
 cache = {}
+
 
 def get_from_cache(ip):
     if ip in cache:
@@ -799,23 +871,29 @@ def get_from_cache(ip):
             return data
     return None
 
+
 def save_to_cache(ip, data):
     cache[ip] = (data, datetime.now())
 ```
+
 {{% /expand %}}
 
 ### Level 6: Rate Limiting (25 points)
+
 **Challenge:** Respect API rate limits
 
 Requirements:
+
 - Track request count
 - Implement backoff when approaching limit
 - Queue requests if needed
 
 ### Level 7: Master Level (30 points)
+
 **Challenge:** Add statistics dashboard
 
 Create a new operation that returns:
+
 - Total lookups performed
 - Cache hit rate
 - Average response time
@@ -835,6 +913,7 @@ Create a new operation that returns:
 | 7 | ⬜ | 30 | Statistics |
 
 **Total Points:** _____ / 105
+
 ```
 
 ---
@@ -975,9 +1054,11 @@ Count your correct answers: _____ / 5
 - **< 3** = Go back and reread the architecture module
 
 ### Reflection Question
+
 Which concept still feels unclear? Write it down and watch for examples in the labs:
 
 _________________________________________________
+
 ```
 
 ---

@@ -4,9 +4,6 @@ linkTitle: "What are Connectors?"
 weight: 10
 ---
 
-# TODO
-continue this page
-
 ## What is a FortiSOAR Connector?
 
 A **connector** is an integration that allows FortiSOAR to communicate with external tools, services, and platforms. Connectors are how FortiSOAR talks to other products to support the following:
@@ -22,9 +19,9 @@ For example, a VirusTotal connector lets FortiSOAR check file hashes against Vir
 
 While FortiSOAR provides 700+ pre-built connectors, you might need a custom connector when:
 
-- You're integrating with a proprietary or internal tool
+- You're integrating with a proprietary or custom in-house tool
 - You need specific functionality not available in existing connectors (e.g., a connectors missing actions)
-- You want to combine multiple API calls into a single action
+- You want to combine multiple API calls into a single action to simplify the playbook logic
 - Your organization has unique integration requirements
 
 ## Hands on

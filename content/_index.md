@@ -8,7 +8,7 @@ weight: 10
 
 Welcome to the FortiSOAR Connector Building Workshop! This hands-on workshop will guide you through the process of creating custom connectors for FortiSOAR.
 
-**Duration:**  TODO
+**Duration:**  4 hours
 
 **Difficulty:** Intermediate
 

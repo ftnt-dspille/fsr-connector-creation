@@ -49,6 +49,7 @@ Now that you have an understanding of the UI components to a connector, let's ta
 ## Prerequisites
 
 From FortiSOAR version **7.6.4**, uploading, editing, and debugging connectors requires approval from **System Configurations**. This allows users to upload/create custom connectors and custom widgets.
+![img.png](764_requirements_connectors.png?height=500px)
 
 ---
 
@@ -137,6 +138,7 @@ Top-level keys containing information about the connector.
 `info.json` > `configuration` (dict)
 
 Contains the configuration parameters used to set up the connector configuration page.
+![img.png](configuration_details.png?height=500px)
 
 #### Field Structure
 
@@ -199,30 +201,35 @@ Each field in the `configuration.fields` array can include the following key-val
 
 Contains the actions that the connector can perform and their associated metadata and parameters. Operations map to playbook actions.
 
+![img.png](operation_to_connector.png?height=500px)
+
+Inside a playbook, the operations are used to display the available actions, the the parameters used 
+![img.png](operatio_to_playbook.png?height=500px)
+
 #### Operation Structure
 
-| Key | Type | Description |
-|-----|------|-------------|
-| `operation` | string | Internal operation identifier |
-| `title` | string | Display name of the operation |
-| `description` | string | Description of what the operation does |
-| `parameters` | array | Input parameters for the operation |
-| `enabled` | boolean | Whether the operation is active |
+| Key           | Type    | Description                            |
+|---------------|---------|----------------------------------------|
+| `operation`   | string  | Internal operation identifier          |
+| `title`       | string  | Display name of the operation          |
+| `description` | string  | Description of what the operation does |
+| `parameters`  | array   | Input parameters for the operation     |
+| `enabled`     | boolean | Whether the operation is active        |
 
 #### Parameter Structure
 
 Each parameter in the `parameters` array follows the same structure as configuration fields:
 
-| Key | Type | Description |
-|-----|------|-------------|
-| `title` | string | Display name |
-| `name` | string | Internal identifier |
-| `type` | string | Field type (e.g., `"text"`) |
+| Key        | Type    | Description                        |
+|------------|---------|------------------------------------|
+| `title`    | string  | Display name                       |
+| `name`     | string  | Internal identifier                |
+| `type`     | string  | Field type (e.g., `"text"`)        |
 | `required` | boolean | Whether the parameter is mandatory |
-| `visible` | boolean | Whether the parameter is visible |
-| `editable` | boolean | Whether the user can edit it |
-| `value` | string | Default value |
-| `tooltip` | string | Tooltip text |
+| `visible`  | boolean | Whether the parameter is visible   |
+| `editable` | boolean | Whether the user can edit it       |
+| `value`    | string  | Default value                      |
+| `tooltip`  | string  | Tooltip text                       |
 
 #### Example
 

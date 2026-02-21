@@ -1,3 +1,8 @@
+---
+title: Transformation Roadmap
+linkTitle: Transformation Roadmap
+weight: 20
+---
 # Workshop Transformation Roadmap
 ## From Passive to Interactive: A Practical Implementation Plan
 

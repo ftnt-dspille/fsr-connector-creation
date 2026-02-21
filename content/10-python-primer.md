@@ -6,13 +6,13 @@ weight: 20
 
 ## Overview
 
-This section covers the Python concepts you need to build FortiSOAR connectors. Don't worry if you're not a Python expert—we'll focus only on what's relevant for connector development.
+This section covers the Python concepts you need to build FortiSOAR connectors. Don't worry if you're not a Python expert. We'll focus only on what's relevant for connector development. 
 
 ## Python Basics for Connectors
 
 ### Variables and Data Types
 
-Connectors work extensively with different data types to handle API requests and responses.
+Connectors work with different data types to handle API requests and responses.
 
 **Strings** - Text data like URLs, usernames, and messages:
 ```python
@@ -20,6 +20,7 @@ server_url = "https://api.example.com"
 username = "admin"
 api_endpoint = f"{server_url}/users/{username}"  # String formatting
 ```
+
 
 **Integers and Floats** - Numbers for timeouts, limits, and counts:
 ```python
@@ -193,12 +194,6 @@ indicators = [
     {"value": "evil.com", "type": "domain"}
 ]
 ip_only = [item['value'] for item in indicators if item['type'] == 'ip']
-
-# Building lists from API results
-results = []
-for page in range(1, 4):
-    response = api_call(page)
-    results.extend(response['data'])  # Add all items from this page
 ```
 
 ### Dictionary Operations
@@ -245,6 +240,7 @@ Connectors are Python classes, but you don't need deep OOP knowledge.
 
 ```python
 from connectors.core.connector import Connector
+from operations import operations
 
 class MyConnector(Connector):
     """Your connector inherits from the base Connector class"""
@@ -292,45 +288,6 @@ def make_api_call(config, endpoint, method='GET', data=None):
         
     except Exception as e:
         raise ConnectorError(f"API call failed: {str(e)}")
-```
-
-### Pattern 2: Response Normalization
-
-```python
-def normalize_response(api_response):
-    """Convert API response to FortiSOAR format"""
-    
-    return {
-        'indicator_value': api_response.get('ioc_value'),
-        'reputation': api_response.get('verdict', 'Unknown').lower(),
-        'confidence': api_response.get('score', 0),
-        'source': 'ThreatFeed API',
-        'raw_response': api_response
-    }
-```
-
-### Pattern 3: Pagination Handling
-
-```python
-def fetch_all_results(config, params):
-    """Fetch all pages of results"""
-    
-    all_results = []
-    page = 1
-    
-    while True:
-        response = make_api_call(config, f"/alerts?page={page}")
-        
-        results = response.get('results', [])
-        all_results.extend(results)
-        
-        # Check if more pages exist
-        if not response.get('has_next_page'):
-            break
-        
-        page += 1
-    
-    return all_results
 ```
 
 ## Python Practice Exercise

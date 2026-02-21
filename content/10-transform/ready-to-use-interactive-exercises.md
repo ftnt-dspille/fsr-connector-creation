@@ -1,6 +1,13 @@
+---
+title: Ready-to-Use Interactive
+linkTitle: Ready-to-Use Interactive
+weight: 10
+---
+
 # Ready-to-Use Interactive Exercises for FortiSOAR Workshop
 
 ## Instructions
+
 Copy and paste these exercises directly into your workshop modules at the indicated locations.
 
 ---
@@ -104,25 +111,25 @@ This code looks up threat intelligence but crashes on some responses. **Find and
 
 ```python
 def get_threat_intelligence(config, params):
-    """Get threat intel for an indicator"""
-    
-    # Get indicator from params
-    indicator = params['indicator']  # 🐛 Bug #1
-    
-    # Make API call
-    url = f"{config['server']}/api/check"
-    response = requests.post(url, json={'value': indicator})
-    
-    # Parse response
-    data = response.json()
-    threat_score = data['score']  # 🐛 Bug #2
-    
-    # Return result
-    return {
-        'indicator': indicator,
-        'threat_score': threat_score,
-        'is_malicious': data['verdict']['malicious']  # 🐛 Bug #3
-    }
+"""Get threat intel for an indicator"""
+
+# Get indicator from params
+indicator = params['indicator']  # 🐛 Bug #1
+
+# Make API call
+url = f"{config['server']}/api/check"
+response = requests.post(url, json={'value': indicator})
+
+# Parse response
+data = response.json()
+threat_score = data['score']  # 🐛 Bug #2
+
+# Return result
+return {
+'indicator': indicator,
+'threat_score': threat_score,
+'is_malicious': data['verdict']['malicious']  # 🐛 Bug #3
+}
 ```
 
 ### Test Cases
@@ -148,6 +155,7 @@ result = get_threat_intelligence(config, params)  # Should not crash!
 **Problem:** Using `params['indicator']` throws `KeyError` if key doesn't exist.
 
 **Fix Pattern:**
+
 ```python
 indicator = params.get('indicator')
 if not indicator:
@@ -161,6 +169,7 @@ if not indicator:
 **Problem:** `response.json()` might fail, or response might contain error message instead of data.
 
 **Fix Pattern:**
+
 ```python
 response.raise_for_status()  # Raises error for 4xx/5xx
 data = response.json()
@@ -169,12 +178,14 @@ data = response.json()
 if 'error' in data:
     raise ConnectorError(f"API error: {data['error']}")
 ```
+
 {{% /expand %}}
 
 {{% expand "Hint #3: Safe Navigation" %}}
 **Problem:** Accessing nested dictionary keys like `data['verdict']['malicious']` crashes if any level is missing.
 
 **Fix Pattern:**
+
 ```python
 # Option 1: Chained .get()
 is_malicious = data.get('verdict', {}).get('malicious', False)
@@ -183,24 +194,26 @@ is_malicious = data.get('verdict', {}).get('malicious', False)
 verdict = data.get('verdict')
 is_malicious = verdict.get('malicious', False) if verdict else False
 ```
+
 {{% /expand %}}
 
 {{% expand "Complete Solution" %}}
+
 ```python
 def get_threat_intelligence(config, params):
     """Get threat intel for an indicator"""
-    
+
     try:
         # Validate required parameters
         indicator = params.get('indicator')
         if not indicator:
             raise ConnectorError('Indicator value is required')
-        
+
         # Build URL with validation
         server_url = config.get('server')
         if not server_url:
             raise ConnectorError('Server URL not configured')
-        
+
         # Make API call
         url = f"{server_url}/api/check"
         response = requests.post(
@@ -208,22 +221,22 @@ def get_threat_intelligence(config, params):
             json={'value': indicator},
             timeout=30
         )
-        
+
         # Check HTTP status
         response.raise_for_status()
-        
+
         # Parse response
         data = response.json()
-        
+
         # Check for API-level errors
         if 'error' in data:
             raise ConnectorError(f"API error: {data.get('error', 'Unknown error')}")
-        
+
         # Safe navigation of nested data
         threat_score = data.get('score', 0)
         verdict = data.get('verdict', {})
         is_malicious = verdict.get('malicious', False)
-        
+
         # Return normalized response
         return {
             'indicator': indicator,
@@ -232,13 +245,13 @@ def get_threat_intelligence(config, params):
             'confidence': verdict.get('confidence', 'unknown'),
             'raw_response': data
         }
-        
+
     except requests.exceptions.Timeout:
         raise ConnectorError('Request timed out. Try again.')
-    
+
     except requests.exceptions.ConnectionError:
         raise ConnectorError(f'Cannot connect to {server_url}')
-    
+
     except requests.exceptions.HTTPError as e:
         status = e.response.status_code
         if status == 401:
@@ -247,22 +260,23 @@ def get_threat_intelligence(config, params):
             raise ConnectorError('Rate limit exceeded. Wait and retry.')
         else:
             raise ConnectorError(f'HTTP error {status}')
-    
+
     except json.JSONDecodeError:
         raise ConnectorError('Invalid JSON response from API')
-    
+
     except Exception as e:
         raise ConnectorError(f'Unexpected error: {str(e)}')
 ```
 
 **Key Improvements:**
+
 1. ✅ Validates all inputs before use
 2. ✅ Uses safe dictionary access throughout
 3. ✅ Handles specific error types with helpful messages
 4. ✅ Includes timeout protection
 5. ✅ Returns consistent structure even if some fields missing
 6. ✅ Includes raw response for debugging
-{{% /expand %}}
+   {{% /expand %}}
 
 ### Challenge 2: Your Turn
 
@@ -280,36 +294,40 @@ Write a function that handles this API response safely:
 ```
 
 **Your function should:**
+
 - Return the email if available
 - Return `None` if user not found
 - Raise `ConnectorError` with helpful message on errors
 
 {{% expand "Solution Template" %}}
+
 ```python
 def get_user_email(config, params):
     """Safely extract email from API response"""
-    
+
     try:
         # Make API call (implementation omitted)
         data = response.json()
-        
+
         # TODO: Check status field
         status = data.get('status')
         if status == 'error':
             # TODO: Return error message
             pass
-        
+
         # TODO: Safely navigate to email
         # Remember: data field might be None or missing 'user'
-        
+
         # TODO: Return email or None
-        
+
     except Exception as e:
         raise ConnectorError(f'Failed to get user email: {str(e)}')
 ```
+
 {{% /expand %}}
 
 ---
+
 ```
 
 ---
@@ -345,23 +363,23 @@ Parameters:
 **Trace what happens step-by-step:**
 
 1. **Starting Point:**
-   - What function receives this first?
-   - In which file is this function?
-   - What parameters does it receive?
+    - What function receives this first?
+    - In which file is this function?
+    - What parameters does it receive?
 
 2. **Routing:**
-   - How does the connector know which operation to run?
-   - What data structure maps operation names to functions?
+    - How does the connector know which operation to run?
+    - What data structure maps operation names to functions?
 
 3. **Execution:**
-   - Where is the actual API call made?
-   - What information does this function need from `config`?
-   - What information comes from `params`?
+    - Where is the actual API call made?
+    - What information does this function need from `config`?
+    - What information comes from `params`?
 
 4. **Response:**
-   - What format should the function return?
-   - Where does this data go after returning?
-   - How can the playbook access this data?
+    - What format should the function return?
+    - Where does this data go after returning?
+    - How can the playbook access this data?
 
 ### Fill in the Sequence Diagram
 
@@ -392,6 +410,7 @@ Complete this flow by filling in the blanks:
 ```
 
 {{% expand "Click to check your answers" %}}
+
 ```
 1. FortiSOAR receives playbook step request
    ↓
@@ -417,35 +436,39 @@ Complete this flow by filling in the blanks:
 ```
 
 **Key Points:**
+
 - `connector.py` is the traffic controller
 - `operations.py` does the actual work
 - Config provides connection info (URLs, keys)
 - Params provide operation-specific inputs
 - Result becomes available in playbook variables
-{{% /expand %}}
+  {{% /expand %}}
 
 ### Bonus Challenge: Find the Bug
 
 This connector is failing. Where's the problem?
 
 **Playbook Error Message:**
+
 ```
 Error executing step Get_IP_Reputation:
 ConnectorError: 'ip_address'
 ```
 
 **connector.py:**
+
 ```python
 def execute(self, config, operation, params, **kwargs):
     operations = {
         'get_ip_reputation': get_ip_reputation,
         'get_domain_reputation': get_domain_reputation
     }
-    
+
     return operations[operation](config, params)
 ```
 
 **operations.py:**
+
 ```python
 def get_ip_reputation(config, params):
     ip = params['ip_address']  # Line 15
@@ -462,12 +485,13 @@ def get_ip_reputation(config, params):
 **Symptom:** Error message shows `'ip_address'` which is the KeyError string representation.
 
 **Fix:**
+
 ```python
 def get_ip_reputation(config, params):
     ip = params.get('ip_address')
     if not ip:
         raise ConnectorError('IP address parameter is required')
-    
+
     url = f"{config['server_url']}/ip/{ip}"
     response = requests.get(url, timeout=30)
     response.raise_for_status()  # Also add error checking
@@ -478,6 +502,7 @@ def get_ip_reputation(config, params):
 {{% /expand %}}
 
 ---
+
 ```
 
 ---
@@ -506,6 +531,7 @@ curl http://ip-api.com/json/8.8.8.8
 ```
 
 **Expected Result:**
+
 ```json
 {
   "status": "success",
@@ -569,6 +595,7 @@ done
 **Rate Limit:** 45 requests per minute for free tier
 
 **When hit:**
+
 ```json
 {
   "message": "You have exceeded the maximum number of requests. Please try again later."
@@ -598,6 +625,7 @@ Based on your testing, list the error scenarios your connector must handle:
 Look at the full API response. Which fields will you include in your connector's output?
 
 **Available Fields:**
+
 ```json
 {
   "status": "success",
@@ -620,16 +648,19 @@ Look at the full API response. Which fields will you include in your connector's
 **Your Normalized Response Design:**
 
 Required fields (always include):
+
 - [ ] _______________
 - [ ] _______________
 - [ ] _______________
 
 Optional fields (include if useful):
+
 - [ ] _______________
 - [ ] _______________
 
 {{% expand "Suggested design" %}}
 **Core Security/Investigation Fields:**
+
 ```json
 {
   "status": "success",
@@ -646,16 +677,18 @@ Optional fields (include if useful):
 ```
 
 **Rationale:**
+
 - IP address for correlation
 - Country/city for geolocation
 - ISP for infrastructure investigation
 - Coordinates for mapping
 - Skip: zip code, org name (less useful for security)
-{{% /expand %}}
+  {{% /expand %}}
 
 ### **Ready to Code?**
 
 You now understand:
+
 - ✅ How the API works
 - ✅ What errors can occur
 - ✅ What data you'll return
@@ -664,6 +697,7 @@ You now understand:
 **Next:** Write the connector code with confidence!
 
 ---
+
 ```
 
 ### INSERT AFTER: Lab completion section
@@ -715,6 +749,7 @@ def batch_lookup_ips(config, params):
 ```
 
 **Test Cases:**
+
 ```python
 # Test 1: All valid
 params = {'ip_addresses': '8.8.8.8, 1.1.1.1, 9.9.9.9'}
@@ -727,21 +762,22 @@ params = {'ip_addresses': ''}
 ```
 
 {{% expand "Solution" %}}
+
 ```python
 def batch_lookup_ips(config, params):
     """Lookup multiple IPs at once"""
-    
+
     # Parse IP list
     ip_string = params.get('ip_addresses', '')
     if not ip_string:
         raise ConnectorError('IP addresses parameter is required')
-    
+
     # Split and clean
     ip_list = [ip.strip() for ip in ip_string.split(',') if ip.strip()]
-    
+
     if not ip_list:
         raise ConnectorError('At least one IP address is required')
-    
+
     # Process each IP
     results = []
     for ip in ip_list:
@@ -754,11 +790,11 @@ def batch_lookup_ips(config, params):
                 'ip_address': ip,
                 'error': str(e)
             })
-    
+
     # Return summary
     success_count = len([r for r in results if r.get('status') == 'success'])
     failed_count = len(results) - success_count
-    
+
     return {
         'results': results,
         'total_processed': len(results),
@@ -766,9 +802,11 @@ def batch_lookup_ips(config, params):
         'failed_count': failed_count
     }
 ```
+
 {{% /expand %}}
 
 **Verification:**
+
 - [ ] Processes multiple IPs successfully
 - [ ] Handles mix of valid/invalid IPs
 - [ ] Returns summary statistics
@@ -777,25 +815,30 @@ def batch_lookup_ips(config, params):
 ---
 
 ### Challenge 2: Smart Caching (Intermediate)
+
 **Goal:** Avoid repeated lookups for same IP
 
 **Requirements:**
+
 - Cache results in memory
 - Expire after 1 hour
 - Track cache hit rate
 
 **Hints:**
+
 ```python
 from datetime import datetime, timedelta
 
 # Store: {ip: (data, timestamp)}
 cache = {}
 
+
 def is_cache_expired(timestamp, max_age_hours=1):
     return datetime.now() - timestamp > timedelta(hours=max_age_hours)
 ```
 
 **Bonus:** Add cache statistics operation:
+
 ```python
 def get_cache_stats(config, params):
     """Return cache performance metrics"""
@@ -809,16 +852,20 @@ def get_cache_stats(config, params):
 ---
 
 ### Challenge 3: Input Validation (Intermediate)
+
 **Goal:** Validate IP addresses before making API calls
 
 **Requirements:**
+
 - Reject obviously invalid formats
 - Reject private IP ranges
 - Provide helpful error messages
 
 **Starter Code:**
+
 ```python
 import ipaddress
+
 
 def validate_ip_address(ip_string):
     """
@@ -830,22 +877,23 @@ def validate_ip_address(ip_string):
     try:
         # TODO: Parse IP address
         ip = ipaddress.ip_address(ip_string)
-        
+
         # TODO: Check if private
         if ip.is_private:
             raise ConnectorError(
                 f'{ip_string} is a private IP address and cannot be geolocated'
             )
-        
+
         # TODO: Return validated IP
         return str(ip)
-        
+
     except ValueError:
         # TODO: Provide helpful error
         raise ConnectorError(f'Invalid IP address format: {ip_string}')
 ```
 
 **Test Cases:**
+
 ```python
 # Should pass
 validate_ip_address('8.8.8.8')
@@ -860,41 +908,47 @@ validate_ip_address('999.999.999.999')
 ---
 
 ### Challenge 4: Rate Limit Handling (Advanced)
+
 **Goal:** Handle API rate limits gracefully
 
 **Requirements:**
+
 - Track request count
 - Implement exponential backoff
 - Queue requests when limit approached
 
 **Pseudocode:**
+
 ```python
 request_count = 0
 last_reset = datetime.now()
 
+
 def check_rate_limit():
     """Check if we're approaching rate limit"""
     global request_count, last_reset
-    
+
     # Reset counter every minute
     if datetime.now() - last_reset > timedelta(minutes=1):
         request_count = 0
         last_reset = datetime.now()
-    
+
     # If approaching limit, wait
     if request_count >= 40:  # Leave buffer before 45/min limit
         # TODO: Implement wait logic
         pass
-    
+
     request_count += 1
 ```
 
 ---
 
 ### Challenge 5: Enrichment Playbook (Practical)
+
 **Goal:** Build a playbook that uses your connector
 
 **Requirements:**
+
 1. Trigger: Manual or on new Alert
 2. Extract IP addresses from Alert
 3. Lookup geolocation for each IP
@@ -902,6 +956,7 @@ def check_rate_limit():
 5. Create note with findings
 
 **Playbook Steps:**
+
 ```
 1. Extract IPs (regex or field)
 2. Batch Lookup (your connector)
@@ -929,6 +984,7 @@ def check_rate_limit():
 **Completed:** _____ / 5
 
 ---
+
 ```
 
 ---
@@ -994,69 +1050,74 @@ if __name__ == '__main__':
 ### Step-by-Step Guide
 
 **Step 1: Extract and validate parameters**
+
 ```python
 def get_crypto_price(config, params):
     # Get the currency pair from params
     pair = params.get('currency_pair')
     if not pair:
         raise ValueError('Currency pair is required')
-    
+
     # Continue to step 2...
 ```
 
 **Step 2: Build the API URL**
+
 ```python
     # Get config values
-    base_url = config.get('server_url', 'https://api.coinbase.com')
-    timeout = config.get('timeout', 30)
-    
-    # Build endpoint URL
-    # Coinbase API: /v2/prices/{currency-pair}/spot
-    url = f"{base_url}/v2/prices/{pair}/spot"
-    
-    print(f"Calling: {url}")  # For debugging
+base_url = config.get('server_url', 'https://api.coinbase.com')
+timeout = config.get('timeout', 30)
+
+# Build endpoint URL
+# Coinbase API: /v2/prices/{currency-pair}/spot
+url = f"{base_url}/v2/prices/{pair}/spot"
+
+print(f"Calling: {url}")  # For debugging
 ```
 
 **Step 3: Make the API call with error handling**
+
 ```python
     try:
-        response = requests.get(url, timeout=timeout)
-        response.raise_for_status()  # Raises error for 4xx/5xx
-        
-        data = response.json()
-        
-        # Continue to step 4...
-        
-    except requests.exceptions.Timeout:
-        raise Exception(f'Request timed out after {timeout} seconds')
-    
-    except requests.exceptions.ConnectionError:
-        raise Exception(f'Cannot connect to {base_url}')
-    
-    except Exception as e:
-        raise Exception(f'API call failed: {str(e)}')
+    response = requests.get(url, timeout=timeout)
+    response.raise_for_status()  # Raises error for 4xx/5xx
+
+    data = response.json()
+
+    # Continue to step 4...
+
+except requests.exceptions.Timeout:
+    raise Exception(f'Request timed out after {timeout} seconds')
+
+except requests.exceptions.ConnectionError:
+    raise Exception(f'Cannot connect to {base_url}')
+
+except Exception as e:
+    raise Exception(f'API call failed: {str(e)}')
 ```
 
 **Step 4: Normalize the response**
+
 ```python
         # Coinbase returns: {"data": {"base": "BTC", "currency": "USD", "amount": "45000.00"}}
-        # We'll normalize to a cleaner format
-        
-        price_data = data.get('data', {})
-        
-        return {
-            'currency_pair': pair,
-            'price': float(price_data.get('amount', 0)),
-            'base_currency': price_data.get('base'),
-            'quote_currency': price_data.get('currency'),
-            'timestamp': datetime.now().isoformat(),
-            'raw_response': data  # Keep original for reference
-        }
+# We'll normalize to a cleaner format
+
+price_data = data.get('data', {})
+
+return {
+    'currency_pair': pair,
+    'price': float(price_data.get('amount', 0)),
+    'base_currency': price_data.get('base'),
+    'quote_currency': price_data.get('currency'),
+    'timestamp': datetime.now().isoformat(),
+    'raw_response': data  # Keep original for reference
+}
 ```
 
 ### Complete Solution
 
 {{% expand "Click to see complete working code" %}}
+
 ```python
 import requests
 from datetime import datetime
@@ -1070,30 +1131,31 @@ params = {
     'currency_pair': 'BTC-USD'
 }
 
+
 def get_crypto_price(config, params):
     """Fetch cryptocurrency spot price from Coinbase"""
-    
+
     try:
         # Extract and validate
         pair = params.get('currency_pair')
         if not pair:
             raise ValueError('Currency pair is required (e.g., BTC-USD)')
-        
+
         # Build URL
         base_url = config.get('server_url', 'https://api.coinbase.com')
         timeout = config.get('timeout', 30)
         url = f"{base_url}/v2/prices/{pair}/spot"
-        
+
         print(f"Fetching price for {pair}...")
-        
+
         # Make API call
         response = requests.get(url, timeout=timeout)
         response.raise_for_status()
-        
+
         # Parse response
         data = response.json()
         price_data = data.get('data', {})
-        
+
         # Normalize
         result = {
             'currency_pair': pair,
@@ -1104,31 +1166,32 @@ def get_crypto_price(config, params):
             'success': True,
             'raw_response': data
         }
-        
+
         return result
-        
+
     except requests.exceptions.Timeout:
         raise Exception(f'Request timed out after {timeout} seconds')
-    
+
     except requests.exceptions.ConnectionError:
         raise Exception(f'Cannot connect to {base_url}. Check your internet connection.')
-    
+
     except requests.exceptions.HTTPError as e:
         status = e.response.status_code
         if status == 404:
             raise Exception(f'Currency pair {pair} not found. Try BTC-USD, ETH-USD, etc.')
         else:
             raise Exception(f'API error: HTTP {status}')
-    
+
     except ValueError as e:
         raise Exception(str(e))
-    
+
     except Exception as e:
         raise Exception(f'Unexpected error: {str(e)}')
 
+
 # Test the function
 if __name__ == '__main__':
-    
+
     # Test 1: Valid request
     print("Test 1: Valid currency pair")
     try:
@@ -1136,9 +1199,9 @@ if __name__ == '__main__':
         print(f"✓ Success! {result['currency_pair']} = ${result['price']}")
     except Exception as e:
         print(f"✗ Failed: {e}")
-    
-    print("\n" + "="*50 + "\n")
-    
+
+    print("\n" + "=" * 50 + "\n")
+
     # Test 2: Invalid currency pair
     print("Test 2: Invalid currency pair")
     try:
@@ -1147,9 +1210,9 @@ if __name__ == '__main__':
         print(f"✓ Unexpected success: {result}")
     except Exception as e:
         print(f"✓ Correctly handled error: {e}")
-    
-    print("\n" + "="*50 + "\n")
-    
+
+    print("\n" + "=" * 50 + "\n")
+
     # Test 3: Missing parameter
     print("Test 3: Missing parameter")
     try:
@@ -1158,9 +1221,9 @@ if __name__ == '__main__':
         print(f"✓ Unexpected success: {result}")
     except Exception as e:
         print(f"✓ Correctly handled error: {e}")
-    
-    print("\n" + "="*50 + "\n")
-    
+
+    print("\n" + "=" * 50 + "\n")
+
     # Test 4: Different currency
     print("Test 4: Different currency (ETH)")
     try:
@@ -1170,6 +1233,7 @@ if __name__ == '__main__':
     except Exception as e:
         print(f"✗ Failed: {e}")
 ```
+
 {{% /expand %}}
 
 ### Run and Test
@@ -1179,6 +1243,7 @@ if __name__ == '__main__':
 3. Run: `python connector_practice.py`
 
 **Expected Output:**
+
 ```
 Test 1: Valid currency pair
 Fetching price for BTC-USD...
@@ -1216,20 +1281,21 @@ Fetching price for ETH-USD...
 ### Bonus Challenges
 
 1. **Add more operations:**
-   - Get historical prices
-   - Compare multiple currencies
-   - Calculate percentage change
+    - Get historical prices
+    - Compare multiple currencies
+    - Calculate percentage change
 
 2. **Improve error messages:**
-   - Suggest valid currency pairs when invalid one used
-   - Add retry logic for timeouts
+    - Suggest valid currency pairs when invalid one used
+    - Add retry logic for timeouts
 
 3. **Add features:**
-   - Cache recent results
-   - Log all API calls
-   - Rate limiting
+    - Cache recent results
+    - Log all API calls
+    - Rate limiting
 
 ---
+
 ```
 
 ---
