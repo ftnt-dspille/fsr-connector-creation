@@ -6,41 +6,305 @@ description: "Description"
 ---
 
 # TODO
-continue this page
+
+## Prerequisites
+- Understanding of basic file structure
+- Understanding of JSON format of files
 
 ## Common Connector Components
 
-Most connectors follow these 
+Most connectors consist of these 2 compoents
 
-### Configuration
+### Configuration Section UI
 
-- Store reusable connection details (URL, credentials)
-- Multiple configurations per connector (dev, prod, different regions)
+> Example connector configuration section
+
+![img.png](alienvault_connector_configuration.png?height=400px)
+
+- Stores reusable connection details (URL, credentials, SSL verify, tcp port)
+    - **API Key**: Pass key in header or query parameter
+    - **Basic Auth**: Username/password
+    - **OAuth**: Token-based authentication
+- Supports Multiple configurations per connector (dev, prod, different regions)
+    - You can click "**Add Configuration**" to add additional configurations as needed
+    - This is useful if you need have mulitple of the same product that you need to connect to
 - Health check validates configuration
+    - The health check helps you confirm that the connector is able to connect to the external API
+  > example health check
 
-### Operations Pattern
+![img.png](successful_health_check.png)
+
+### Operations Section UI
 
 - Each action is a separate operation (get_ip_reputation, block_domain)
-- Operations share configuration
-- Standard input/output format
+- Operations are able to use configurations to authenticate to external systems
+- Operations typically have parameters which are the input to the operation. 
+- Operations typically returns json back to the user which can be used to build dynamic playbooks
 
-### Authentication Patterns
 
-- **API Key**: Pass key in header or query parameter
-- **Basic Auth**: Username/password
-- **OAuth**: Token-based authentication
-- **Custom**: Signature generation, multi-factor auth
+## Connectors File Structure breakdown
+Now that you have an understanding of the UI components to a connector, let's take a look at the connector file structure, and how the UI translates the the files that make up the connector. 
 
-## Summary
 
-In this module, you learned:
+## Prerequisites
 
-- ✓ Connectors are Python-based integrations that extend FortiSOAR's capabilities
-- ✓ The standard connector architecture includes connector.py, info.json, and operations.py
-- ✓ Three development methods: Manual (full control), Wizard (fast), RDK (professional)
-- ✓ Data flows from playbooks through connector.py to operations.py to external APIs
-- ✓ Understanding the architecture helps you build better, more maintainable connectors
+From FortiSOAR version **7.6.4**, uploading, editing, and debugging connectors requires approval from **System Configurations**. This allows users to upload/create custom connectors and custom widgets.
 
-**Next Steps:**
+---
 
-Ready to write some code? The next module covers essential Python concepts you'll need for connector development. Even if you know Python, we recommend reviewing it to see how specific patterns apply to FortiSOAR connectors.
+## Connector Structure
+
+The basic structure of a connector is as follows:
+
+```
+connector/
+├── info.json
+├── connector.py
+├── operations.py
+```
+
+
+## `info.json`
+
+The `info.json` file contains information about the name and version of the connector, logo image file names, the configuration parameters, the set of functions supported by the connector, and their input parameters. **All field names in the `info.json` file must be unique.**
+
+The file has **3 main parts**:
+
+1. **Metadata** — Information about the connector (name, version, logo, etc.)
+2. **Configuration** — Parameters used to set up the connector configuration page
+3. **Operations** — Actions the connector can perform, with associated metadata and parameters
+
+---
+
+### 1. Metadata
+
+Top-level keys containing information about the connector.
+
+#### Essential Fields
+
+| Field     | Description                                | Example              |
+|-----------|--------------------------------------------|----------------------|
+| `name`    | Connector's internal API name (kebab-case) | `"sample-connector"` |
+| `label`   | Display label shown to the user            | `"Sample Connector"` |
+| `version` | Semantic version number                    | `"1.0.0"`            |
+
+#### All Metadata Fields
+
+{{% expand title="Expand me..." %}}
+
+| Field             | Description                        | Example                      |
+|-------------------|------------------------------------|------------------------------|
+| `name`            | Connector's internal name          | `"sample-connector"`         |
+| `label`           | Display label for the connector    | `"Sample Connector"`         |
+| `description`     | Description of the connector       | `"Connector description..."` |
+| `publisher`       | Name/email of the publisher        | `"anonyges@gmail.com"`       |
+| `cs_approved`     | Whether connector is CS approved   | `true` / `false`             |
+| `cs_compatible`   | Whether connector is CS compatible | `true` / `false`             |
+| `version`         | Version number                     | `"1.0.0"`                    |
+| `category`        | Connector category type (array)    | `["Analytics and SIEM"]`     |
+| `icon_small_name` | Filename of the small icon         | `"connector_logo_small.png"` |
+| `icon_large_name` | Filename of the large icon         | `"connector_logo_large.png"` |
+
+{{% /expand %}}
+
+{{
+
+#### Example
+
+```json
+{
+    "name": "sample-connector",
+    "version": "1.0.0",
+    "label": "Sample Connector",
+    "description": "Connector description here.",
+    "publisher": "anonyges@gmail.com",
+    "icon_large_name": "connector_logo_large.png",
+    "icon_small_name": "connector_logo_small.png",
+    "category": [
+        "Analytics and SIEM"
+    ]
+}
+```
+
+> **Naming Convention:**
+> - Title: `"Sample Connector"` → `"Organization ProductName"`
+> - API name: `"sample-connector"` → `"org-productName"`
+
+---
+
+### 2. Configuration
+
+`info.json` > `configuration` (dict)
+
+Contains the configuration parameters used to set up the connector configuration page.
+
+#### Field Structure
+
+Each field in the `configuration.fields` array can include the following key-value pairs:
+
+{{% expand title="Expand me..." %}}
+
+| Key           | Type    | Description                                                                                                                                              |
+|---------------|---------|----------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `title`       | string  | Display name of the field                                                                                                                                |
+| `name`        | string  | Internal field identifier                                                                                                                                |
+| `type`        | string  | Field type (e.g., : text, password, checkbox, integer, decimal, datetime, phone, email, file, richtext, json, textarea, image, select, and multiselect.) |
+| `required`    | boolean | Whether the field is mandatory                                                                                                                           |
+| `editable`    | boolean | Whether the user can edit the field                                                                                                                      |
+| `visible`     | boolean | Whether the field is visible                                                                                                                             |
+| `description` | string  | Field description                                                                                                                                        |
+| `tooltip`     | string  | Tooltip text                                                                                                                                             |
+| `placeholder` | string  | Placeholder text                                                                                                                                         |
+| `validation`  | object  | Validation rules (see below)                                                                                                                             |
+
+{{% /expand %}}
+
+#### Validation Object
+
+```json
+{
+    "pattern": "regex pattern for validation",
+    "patternError": "Error message if validation fails"
+}
+```
+
+#### Example
+
+```json
+{
+    "configuration": {
+        "fields": [
+            {
+                "title": "URL",
+                "type": "text",
+                "name": "url",
+                "required": true,
+                "visible": true,
+                "editable": true,
+                "validation": {
+                    "pattern": "^https?://...",
+                    "patternError": "Server URL must begin with https and end without '/'. Port number can be added, e.g. https://example.com:80."
+                }
+            }
+        ]
+    }
+}
+```
+
+---
+
+### 3. Operations
+
+`info.json` > `operations` (list of dicts)
+
+Contains the actions that the connector can perform and their associated metadata and parameters. Operations map to playbook actions.
+
+#### Operation Structure
+
+| Key | Type | Description |
+|-----|------|-------------|
+| `operation` | string | Internal operation identifier |
+| `title` | string | Display name of the operation |
+| `description` | string | Description of what the operation does |
+| `parameters` | array | Input parameters for the operation |
+| `enabled` | boolean | Whether the operation is active |
+
+#### Parameter Structure
+
+Each parameter in the `parameters` array follows the same structure as configuration fields:
+
+| Key | Type | Description |
+|-----|------|-------------|
+| `title` | string | Display name |
+| `name` | string | Internal identifier |
+| `type` | string | Field type (e.g., `"text"`) |
+| `required` | boolean | Whether the parameter is mandatory |
+| `visible` | boolean | Whether the parameter is visible |
+| `editable` | boolean | Whether the user can edit it |
+| `value` | string | Default value |
+| `tooltip` | string | Tooltip text |
+
+#### Example
+
+```json
+{
+    "operations": [
+        {
+            "operation": "do_something",
+            "title": "Do Something",
+            "description": "Do Something and Returns Something.",
+            "parameters": [
+                {
+                    "title": "something",
+                    "type": "text",
+                    "name": "something",
+                    "required": true,
+                    "visible": true,
+                    "editable": true,
+                    "value": "",
+                    "tooltip": "hello world"
+                }
+            ],
+            "enabled": true
+        }
+    ]
+}
+```
+{{% notice note %}}
+Parameters are not always required for operations, but are often needed to allow users to filter data, or take specific action on data. 
+{{% /notice %}}
+
+
+### Full `info.json` Example
+{{% expand title="Expand me..." %}}
+```json
+{
+    "name": "sample-connector",
+    "version": "1.0.0",
+    "label": "Sample Connector",
+    "description": "Naming convention.\nTitle should be change from \"Sample Connector\" --> \"Organization ProductName\"\nAPI name should change from \"sample-connector\" --> \"org-productName\"",
+    "publisher": "anonyges@gmail.com",
+    "icon_large_name": "connector_logo_large.png",
+    "icon_small_name": "connector_logo_small.png",
+    "category": [
+        "Analytics and SIEM"
+    ],
+    "configuration": {
+        "fields": [
+            {
+                "title": "URL",
+                "type": "text",
+                "name": "url",
+                "required": true,
+                "visible": true,
+                "editable": true,
+                "validation": {
+                    "pattern": "^https?:\\/\\/...",
+                    "patternError": "Server URL must begin with https and end without '/'. Port number can be added, e.g. https://example.com:80."
+                }
+            }
+        ]
+    },
+    "operations": [
+        {
+            "operation": "do_something",
+            "title": "Do Something",
+            "description": "Do Something and Returns Something.",
+            "parameters": [
+                {
+                    "title": "something",
+                    "type": "text",
+                    "name": "something",
+                    "required": true,
+                    "visible": true,
+                    "editable": true,
+                    "value": "",
+                    "tooltip": "hello world"
+                }
+            ],
+            "enabled": true
+        }
+    ]
+}
+```
+{{% /expand %}}
