@@ -4,9 +4,13 @@ linkTitle: Python Primer
 weight: 20
 ---
 
+## TODO
+
+Convert to more hands on. also need to point to a web pytohn site in case pycharm can't be installed. 
+
 ## Overview
 
-This section covers the Python concepts you need to build FortiSOAR connectors. Don't worry if you're not a Python expert. We'll focus only on what's relevant for connector development. 
+This section covers the Python concepts you need to build FortiSOAR connectors. Don't worry if you're not a Python expert. We'll focus only on what's relevant for connector development.
 
 ## Python Basics for Connectors
 
@@ -15,14 +19,15 @@ This section covers the Python concepts you need to build FortiSOAR connectors. 
 Connectors work with different data types to handle API requests and responses.
 
 **Strings** - Text data like URLs, usernames, and messages:
+
 ```python
 server_url = "https://api.example.com"
 username = "admin"
 api_endpoint = f"{server_url}/users/{username}"  # String formatting
 ```
 
-
 **Integers and Floats** - Numbers for timeouts, limits, and counts:
+
 ```python
 timeout = 30
 max_results = 100
@@ -30,18 +35,21 @@ confidence_score = 0.85
 ```
 
 **Booleans** - True/False values for flags and conditions:
+
 ```python
 verify_ssl = True
 is_malicious = False
 ```
 
 **Lists** - Ordered collections of items:
+
 ```python
 ip_addresses = ["192.168.1.1", "10.0.0.1", "172.16.0.1"]
 threat_types = ["malware", "phishing", "c2"]
 ```
 
 **Dictionaries** - Key-value pairs (like JSON):
+
 ```python
 config = {
     "server_url": "https://api.example.com",
@@ -72,14 +80,14 @@ def get_ip_reputation(config, params):
     """
     ip_address = params.get('ip_address')
     server_url = config.get('server_url')
-    
+
     # Function logic here
     result = {
         'ip': ip_address,
         'reputation': 'clean',
         'confidence': 85
     }
-    
+
     return result
 ```
 
@@ -135,19 +143,20 @@ Proper error handling makes connectors reliable and user-friendly.
 ```python
 from connectors.core.connector import ConnectorError
 
+
 def check_ip_reputation(config, params):
     try:
         ip_address = params.get('ip_address')
-        
+
         if not ip_address:
             raise ConnectorError('IP address is required')
-        
+
         # Make API call
         response = requests.get(f"{config['url']}/ip/{ip_address}")
         response.raise_for_status()  # Raises error for 4xx/5xx status
-        
+
         return response.json()
-        
+
     except requests.exceptions.Timeout:
         raise ConnectorError('Request timed out. Check server connectivity.')
     except requests.exceptions.ConnectionError:
@@ -242,18 +251,19 @@ Connectors are Python classes, but you don't need deep OOP knowledge.
 from connectors.core.connector import Connector
 from operations import operations
 
+
 class MyConnector(Connector):
     """Your connector inherits from the base Connector class"""
-    
+
     def execute(self, config, operation, params, **kwargs):
         """This method is called when your connector runs"""
-        
+
         # Route to the right operation
         if operation == 'get_ip_reputation':
             return self.get_ip_reputation(config, params)
         elif operation == 'block_ip':
             return self.block_ip(config, params)
-    
+
     def check_health(self, config):
         """Tests if configuration works"""
         try:
@@ -270,22 +280,22 @@ class MyConnector(Connector):
 ```python
 def make_api_call(config, endpoint, method='GET', data=None):
     """Reusable function for API calls"""
-    
+
     url = f"{config['server_url']}{endpoint}"
     headers = {
         'Authorization': f"Bearer {config['api_token']}",
         'Content-Type': 'application/json'
     }
-    
+
     try:
         if method == 'GET':
             response = requests.get(url, headers=headers, timeout=30)
         elif method == 'POST':
             response = requests.post(url, headers=headers, json=data, timeout=30)
-        
+
         response.raise_for_status()
         return response.json()
-        
+
     except Exception as e:
         raise ConnectorError(f"API call failed: {str(e)}")
 ```
@@ -308,6 +318,7 @@ def filter_malicious(indicators):
     # Your code here
     pass
 
+
 # Test data
 test_indicators = [
     {"value": "1.1.1.1", "score": 25},
@@ -320,10 +331,12 @@ test_indicators = [
 ```
 
 {{% expand "Click to see the solution" %}}
+
 ```python
 def filter_malicious(indicators):
     """Filter indicators with score >= 70"""
     return [ind for ind in indicators if ind.get('score', 0) >= 70]
+
 
 # Or with a regular loop:
 def filter_malicious(indicators):
@@ -333,6 +346,7 @@ def filter_malicious(indicators):
             malicious.append(indicator)
     return malicious
 ```
+
 {{% /expand %}}
 
 ## Key Takeaways

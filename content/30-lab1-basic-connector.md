@@ -3,7 +3,8 @@ title: "Lab 1: Building a Basic Connector"
 linkTitle: "Lab 1: Basic Connector"
 weight: 30
 ---
-
+## TODO
+Convert to using connector wizard to create a new connector
 ## Lab Overview
 
 **Duration:** 60-90 minutes

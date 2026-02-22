@@ -91,7 +91,7 @@ grep "ERROR" /var/log/cyops/cyops-integrations/connectors.log | tail -n 50
 ```
 
 **Log Format:**
-```
+```text
 2024-01-25 10:30:45 INFO your_connector_name operations get_ip_reputation(): Starting operation
 2024-01-25 10:30:45 DEBUG your_connector_name operations get_ip_reputation(): Request params: {'ip': '8.8.8.8'}
 2024-01-25 10:30:46 ERROR your_connector_name operations get_ip_reputation(): API request failed: Connection timeout
@@ -119,19 +119,19 @@ Remember to switch back to the standard `execute()` method before production dep
 ### Task 1.4: Common Issues and Solutions
 
 **Issue: ConnectorError: No module named 'your_module'**
-```
+```text
 Solution: Install missing dependency
 $ sudo /opt/cyops-integrations/.env/bin/pip install your_module --break-system-packages
 ```
 
 **Issue: Health check fails immediately**
-```
+```text
 Solution: Check connector logs for the specific error
 $ grep "check_health" /var/log/cyops/cyops-integrations/connectors.log | tail -n 10
 ```
 
 **Issue: Operation returns None**
-```
+```text
 Solution: Ensure your operation function returns data (not just prints it)
 # Bad:
 def get_data(config, params):
@@ -145,7 +145,7 @@ def get_data(config, params):
 ```
 
 **Issue: Changes to info.json not reflected**
-```
+```text
 Solution: Reimport the connector
 $ sudo /opt/cyops-integrations/.env/bin/python /opt/cyops-integrations/integrations/manage.py reimport_connector -n connector_name -cv 1.0.0 -migrate
 ```
@@ -158,7 +158,7 @@ $ sudo /opt/cyops-integrations/.env/bin/python /opt/cyops-integrations/integrati
 
 FortiSOAR RDK automatically creates test files for each operation:
 
-```
+```text
 connector-name/
 ├── tests/
 │   ├── __init__.py
@@ -279,7 +279,7 @@ pytest tests/ -v
 3. View results in output panel
 
 **Expected output:**
-```
+```text
 tests/test_get_ip_reputation.py::TestGetIPReputation::test_successful_request PASSED
 tests/test_get_ip_reputation.py::TestGetIPReputation::test_missing_ip_parameter PASSED
 tests/test_get_ip_reputation.py::TestGetIPReputation::test_invalid_ip_format PASSED
@@ -355,7 +355,7 @@ Recommendations:
 ```
 
 **Issue: Restricted dependency versions**
-```
+```text
 // Bad - requirements.txt
 requests==2.28.0
 
@@ -451,7 +451,7 @@ tar -czf connector-name.tgz connector-name/
 ```
 
 **What gets packaged:**
-```
+```text
 connector-name.tgz
 └── connector-name/
     ├── info.json
@@ -645,7 +645,7 @@ When updating connectors, maintain backward compatibility when possible:
 ### Common Issues and Solutions
 
 **Issue: Connector not appearing after import**
-```
+```text
 Symptoms: .tgz uploads successfully but connector not visible
 Solutions:
 1. Check connector name matches folder name in .tgz
@@ -654,7 +654,7 @@ Solutions:
 ```
 
 **Issue: Dependencies fail to install**
-```
+```text
 Symptoms: Connector imports but operations fail with ImportError
 Solutions:
 1. Check requirements.txt format (one package per line)
@@ -665,7 +665,7 @@ Solutions:
 ```
 
 **Issue: Health check always fails**
-```
+```text
 Symptoms: Configuration saves but health check shows "Disconnected"
 Solutions:
 1. Add debug logging to check_health() function
@@ -676,7 +676,7 @@ Solutions:
 ```
 
 **Issue: Playbooks can't find connector operation**
-```
+```text
 Symptoms: Playbook step shows "Operation not found"
 Solutions:
 1. Verify operation name in info.json matches operations.py function
@@ -686,7 +686,7 @@ Solutions:
 ```
 
 **Issue: Custom function not appearing in Dynamic Values**
-```
+```text
 Symptoms: Function marked with include_as_function but not visible
 Solutions:
 1. Verify "include_as_function": true is set in operation definition
