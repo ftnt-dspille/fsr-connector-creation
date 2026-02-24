@@ -2,6 +2,7 @@
 title: Building FortiSOAR Connectors Workshop
 linkTitle: Build Connectors
 weight: 100
+draft: true
 ---
 
 ## Lab Overview

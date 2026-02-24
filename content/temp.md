@@ -3,6 +3,7 @@ title: "Temp images"
 linkTitle: "Temp images"
 weight: 100
 description: "Description"
+draft: true
 ---
 
 ## Upload connector

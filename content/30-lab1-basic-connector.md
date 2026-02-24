@@ -2,6 +2,7 @@
 title: "Lab 1: Building a Basic Connector"
 linkTitle: "Lab 1: Basic Connector"
 weight: 30
+draft: true
 ---
 ## TODO
 Convert to using connector wizard to create a new connector

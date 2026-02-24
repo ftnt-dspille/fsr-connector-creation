@@ -2,6 +2,7 @@
 title: "Lab 2: Intermediate Connector"
 linkTitle: "Lab 2: Intermediate"
 weight: 40
+draft: true
 ---
 
 ## Lab Overview
