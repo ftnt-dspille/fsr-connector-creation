@@ -1,4 +1,4 @@
-baseURL = "https://ftnt-dspille.github.io/fsr-noc-automation"
+baseURL = "https://ftnt-dspille.github.io/fsr-connector-creation/"
 canonifyURLs = true
 relativeURLs = false
 
