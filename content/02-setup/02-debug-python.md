@@ -35,26 +35,26 @@ We need some code that has a bug in it so we have something to debug. We'll crea
    ![img.png](debug_me_directory.png)
 2. Paste the following code into the file:
    
-   ```python
-   def calculate_average(numbers):
-       total = 0
-       for number in numbers:
-           total = total + number
-       average = total / len(numbers)
-       return average
+```python
+def calculate_average(numbers):
+    total = 0
+    for number in numbers:
+        total = total + number
+    average = total / len(numbers)
+    return average
 
 
-   def main():
-       grades = [85, 90, 78, 92, 88]
-       average = calculate_average(grades)
-       print(f"Average grade: {average}")
+def main():
+    grades = [85, 90, 78, 92, 88]
+    average = calculate_average(grades)
+    print(f"Average grade: {average}")
 
-       empty_list = []
-       average2 = calculate_average(empty_list)
-       print(f"Average of empty list: {average2}")
-    
-    main()
-   ```
+    empty_list = []
+    average2 = calculate_average(empty_list)
+    print(f"Average of empty list: {average2}")
+
+main()
+```
 
 3. Run the file (**Right-click → Run 'debug_me'**, or `Ctrl+Shift+F10` / `Ctrl+Shift+R`).
 

@@ -78,7 +78,7 @@ After installation, **restart your terminal** so that the `uv` command is availa
 Verify the installation:
 
 ```powershell
-uv --versionwd
+uv --version
 ```
 
 {{% /tab %}}
