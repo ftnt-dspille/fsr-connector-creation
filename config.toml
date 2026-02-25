@@ -28,6 +28,7 @@ themeVariant = "Workshop"
 # themeVariant = "Demo"
 # blue
 # themeVariant = "UseCase"
+logoImage = "white-logo.svg"
 
 # The banner text under Fortinet logo on the top left of the project. Better to be short.
 logoBannerText = "FSR Connector Building"
