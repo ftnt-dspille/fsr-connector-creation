@@ -5,13 +5,13 @@ description: "Add configuration fields so the connector knows which server to co
 weight: 2
 ---
 
-Every connector needs a **configuration** — the settings a FortiSOAR admin fills in when they set up the connector. In this chapter you'll add two configuration fields: the API server URL and a custom User-Agent string.
+Every connector needs a **configuration** - the settings a FortiSOAR admin fills in when they set up the connector. In this chapter you'll add two configuration fields: the API server URL and a custom User-Agent string.
 
 ---
 
 ## 1. What goes in configuration?
 
-Configuration holds values that stay the same across all operations — things like server addresses, credentials, and connection preferences. For our Dad Jokes connector:
+Configuration holds values that stay the same across all operations - things like server addresses, credentials, and connection preferences. For our Dad Jokes connector:
 
 | Field | Why we need it |
 |---|---|
@@ -19,7 +19,7 @@ Configuration holds values that stay the same across all operations — things l
 | **User-Agent** | The Dad Joke API [asks](https://icanhazdadjoke.com/api) that all clients send a custom `User-Agent` header so they can monitor usage. |
 
 {{% notice info %}}
-Even though the Dad Joke API has no authentication, real-world connectors would also include fields like **API Key**, **Username/Password**, or **Verify SSL** here. The pattern is exactly the same — you're just adding more fields.
+Even though the Dad Joke API has no authentication, real-world connectors would also include fields like **API Key**, **Username/Password**, or **Verify SSL** here. The pattern is exactly the same - you're just adding more fields.
 {{% /notice %}}
 
 ---
@@ -29,7 +29,7 @@ Even though the Dad Joke API has no authentication, real-world connectors would 
 1. In the RDK panel, click the **Configuration** tab.
 2. Click **Add Field** to add the first configuration parameter.
 
-### Field 1 — Server URL
+### Field 1 - Server URL
 
 Fill in the following:
 
@@ -46,7 +46,7 @@ Fill in the following:
 
 <!-- ![img.png](images/config_server_url.png) -->
 
-### Field 2 — User-Agent
+### Field 2 - User-Agent
 
 Click **Add Field** again and fill in:
 
@@ -101,7 +101,7 @@ Open `info.json` and confirm the `configuration` section now looks like this:
 ```
 
 {{% notice tip %}}
-You can edit `info.json` directly in the code editor or through the RDK Configuration tab — they stay in sync. Use whichever you're more comfortable with.
+You can edit `info.json` directly in the code editor or through the RDK Configuration tab - they stay in sync. Use whichever you're more comfortable with.
 {{% /notice %}}
 
 ---
@@ -166,7 +166,7 @@ Let's break this down:
 | `config.get('user_agent', ...)` | Reads the User-Agent, with a safe fallback. |
 | `"Accept": "application/json"` | Tells the API we want JSON, not HTML. |
 | `response.raise_for_status()` | Raises an exception if the API returns a 4xx or 5xx status code. |
-| `ConnectorError(...)` | FortiSOAR's standard error class — surfaces the message in the UI. |
+| `ConnectorError(...)` | FortiSOAR's standard error class - surfaces the message in the UI. |
 
 ---
 
@@ -174,14 +174,14 @@ Let's break this down:
 
 The **health check** runs when an admin clicks **Test Configuration** in FortiSOAR. It should verify that the API is reachable with the given settings.
 
-We'll make it fetch a random joke — if that succeeds, the configuration is valid.
+We'll make it fetch a random joke - if that succeeds, the configuration is valid.
 
 Add the following to `operations.py`, below the `_make_request` function:
 
 ```python
 def check_health(config):
     """
-    Health check — fetch a random joke to verify connectivity.
+    Health check - fetch a random joke to verify connectivity.
     Returns True if successful, raises ConnectorError otherwise.
     """
     result = _make_request(config)
@@ -221,9 +221,9 @@ Let's verify our configuration and health check work before moving on.
 
 {{% notice warning %}}
 If the health check fails, check these common issues:
-- **No internet access** — The machine running PyCharm needs to reach `icanhazdadjoke.com`.
-- **Trailing slash** — Make sure the Server URL is `https://icanhazdadjoke.com` (no trailing `/`).
-- **Typo in field names** — The `name` values in `info.json` must exactly match the keys you use in `operations.py` (e.g., `server_url`, `user_agent`).
+- **No internet access** - The machine running PyCharm needs to reach `icanhazdadjoke.com`.
+- **Trailing slash** - Make sure the Server URL is `https://icanhazdadjoke.com` (no trailing `/`).
+- **Typo in field names** - The `name` values in `info.json` must exactly match the keys you use in `operations.py` (e.g., `server_url`, `user_agent`).
 {{% /notice %}}
 
 ---
@@ -237,4 +237,4 @@ Your connector now has a working configuration and health check:
 - ✅ Implemented and tested the **health check**
 - ✅ Confirmed the configuration values flow from `info.json` → `connector.py` → `operations.py`
 
-In the next chapter, you'll add the three **operations** — Get Random Joke, Get Joke by ID, and Search Jokes.
+In the next chapter, you'll add the three **operations** - Get Random Joke, Get Joke by ID, and Search Jokes.

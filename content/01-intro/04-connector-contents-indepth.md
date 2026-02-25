@@ -31,9 +31,9 @@ The `info.json` file contains information about the name and version of the conn
 
 The file has **3 main parts**:
 
-1. **Metadata** — Information about the connector (name, version, logo, etc.)
-2. **Configuration** — Parameters used to set up the connector configuration page
-3. **Operations** — Actions the connector can perform, with associated metadata and parameters
+1. **Metadata** - Information about the connector (name, version, logo, etc.)
+2. **Configuration** - Parameters used to set up the connector configuration page
+3. **Operations** - Actions the connector can perform, with associated metadata and parameters
 
 ---
 

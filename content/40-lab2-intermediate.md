@@ -60,7 +60,7 @@ curl -X GET \
 1. Sign up at https://otx.alienvault.com
 2. Click your username > **Settings**
 3. Copy your **OTX Key**
-4. Keep it secure—you'll need it for configuration
+4. Keep it secure-you'll need it for configuration
 
 ---
 

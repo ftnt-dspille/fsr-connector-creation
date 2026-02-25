@@ -27,7 +27,7 @@ You should get back something like:
 }
 ```
 
-That's the entire API response for a random joke — an `id`, the `joke` text, and a `status` code. Simple, clean, and perfect for learning.
+That's the entire API response for a random joke - an `id`, the `joke` text, and a `status` code. Simple, clean, and perfect for learning.
 
 {{% notice tip %}}
 You can also paste `https://icanhazdadjoke.com/` into a browser. By default it returns HTML, but the JSON response is what our connector will work with.
@@ -145,12 +145,12 @@ class DadJokes(Connector):
 
 Two methods, two jobs:
 
-- `execute` — routes to the correct operation function when a playbook calls the connector.
-- `check_health` — verifies that the configuration works (we'll make it ping the API).
+- `execute` - routes to the correct operation function when a playbook calls the connector.
+- `check_health` - verifies that the configuration works (we'll make it ping the API).
 
 ---
 
-## 6. Quick reference — Details tab actions
+## 6. Quick reference - Details tab actions
 
 The Details tab has several action buttons at the bottom. Here's what they do:
 

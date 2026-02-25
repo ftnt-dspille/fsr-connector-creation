@@ -103,7 +103,7 @@ Here's a connector execution log from a failed operation. Your job is to underst
 3. **Likely cause:** Invalid or expired API key
 4. **Where to fix:** Check the API key configuration, verify headers in `operations.py`
 
-**Pro Tip:** Status 401 always means authentication failure—check credentials first!
+**Pro Tip:** Status 401 always means authentication failure-check credentials first!
 {{% /expand %}}
 ```
 
@@ -260,7 +260,7 @@ Create a simple reference table:
 | Invalid IP | 200 | `{"status": "fail", "message": "..."}` | Still returns 200! |
 | Rate limit | 429 | `{"message": "quota exceeded"}` | 45 requests/minute limit |
 
-**Important Discovery:** The API returns 200 even for invalid IPs—you must check the `status` field!
+**Important Discovery:** The API returns 200 even for invalid IPs-you must check the `status` field!
 {{% /expand %}}
 
 ### Task 3: Plan Your Error Handling

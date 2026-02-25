@@ -1,7 +1,7 @@
 ---
 title: "Add Operations"
 linkTitle: "Add Operations"
-description: "Define three operations — Get Random Joke, Get Joke by ID, and Search Jokes — with parameters, and write the Python code that powers them."
+description: "Define three operations - Get Random Joke, Get Joke by ID, and Search Jokes - with parameters, and write the Python code that powers them."
 weight: 3
 ---
 
@@ -21,7 +21,7 @@ Here's what we're building, mapped to the API endpoints:
 
 ---
 
-## Operation 1 — Get Random Joke
+## Operation 1 - Get Random Joke
 
 ### Add the operation in the RDK
 
@@ -36,7 +36,7 @@ Here's what we're building, mapped to the API endpoints:
 | **Description** | `Fetches a random dad joke from the API.` |
 | **Enabled** | ✅ Checked |
 
-This operation has **no parameters** — it just returns a random joke.
+This operation has **no parameters** - it just returns a random joke.
 
 Click **Save**.
 
@@ -70,11 +70,11 @@ def get_random_joke(config, params):
     return _make_request(config)
 ```
 
-That's it — one line. The `_make_request` helper already calls the base URL (`/`) which returns a random joke.
+That's it - one line. The `_make_request` helper already calls the base URL (`/`) which returns a random joke.
 
 ---
 
-## Operation 2 — Get Joke by ID
+## Operation 2 - Get Joke by ID
 
 ### Add the operation in the RDK
 
@@ -148,7 +148,7 @@ Notice how we read the parameter: `params.get("joke_id")`. The key `"joke_id"` m
 
 ---
 
-## Operation 3 — Search Jokes
+## Operation 3 - Search Jokes
 
 ### Add the operation in the RDK
 
@@ -164,9 +164,9 @@ Notice how we read the parameter: `params.get("joke_id")`. The key `"joke_id"` m
 
 ### Add the parameters
 
-This operation needs two parameters — a required search term and an optional result limit.
+This operation needs two parameters - a required search term and an optional result limit.
 
-**Parameter 1 — Search Term:**
+**Parameter 1 - Search Term:**
 
 1. Click **Add Parameter**.
 2. Fill in:
@@ -181,7 +181,7 @@ This operation needs two parameters — a required search term and an optional r
 | **Visible** | ✅ Checked |
 | **Tooltip** | `The keyword to search for (e.g., "cat", "hipster", "dog").` |
 
-**Parameter 2 — Limit:**
+**Parameter 2 - Limit:**
 
 1. Click **Add Parameter** again.
 2. Fill in:
@@ -253,7 +253,7 @@ def search_jokes(config, params):
     return _make_request(config, endpoint="/search", params=query_params)
 ```
 
-Here the `params` dict from the `_make_request` helper gets passed as **query string parameters** — so `{"term": "cat", "limit": 5}` becomes `?term=cat&limit=5` in the URL.
+Here the `params` dict from the `_make_request` helper gets passed as **query string parameters** - so `{"term": "cat", "limit": 5}` becomes `?term=cat&limit=5` in the URL.
 
 ---
 
@@ -350,7 +350,7 @@ def _make_request(config, endpoint="", params=None):
 
 
 def check_health(config):
-    """Health check — fetch a random joke to verify connectivity."""
+    """Health check - fetch a random joke to verify connectivity."""
     result = _make_request(config)
     if result.get("id") and result.get("joke"):
         return True
@@ -493,9 +493,9 @@ And here's the full `info.json` with all metadata, configuration, and operations
 
 Your connector now has three fully defined operations:
 
-- ✅ **Get Random Joke** — no parameters, returns a random joke
-- ✅ **Get Joke by ID** — one required parameter (`joke_id`), returns a specific joke
-- ✅ **Search Jokes** — one required parameter (`search_term`) and one optional parameter (`limit`), returns a paginated list
+- ✅ **Get Random Joke** - no parameters, returns a random joke
+- ✅ **Get Joke by ID** - one required parameter (`joke_id`), returns a specific joke
+- ✅ **Search Jokes** - one required parameter (`search_term`) and one optional parameter (`limit`), returns a paginated list
 - ✅ All operations are wired to `connector.py` via the `OPERATION_MAP` pattern
 - ✅ All operations reuse the `_make_request` helper for consistent headers and error handling
 
