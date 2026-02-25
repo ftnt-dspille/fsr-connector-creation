@@ -34,8 +34,6 @@ logoImage = "white-logo.svg"
 logoBannerText = "FSR Connector Building"
 # Small text under the title
 logoBannerSubText = "Internal/External"
-################################# END EDITING #################################
-
 
 # Shows a checkmark for visited pages on the menu
 showVisitedLinks = true
