@@ -1,10 +1,11 @@
 ---
 title: "Debug Python Code"
-description: "Learn how to use PyCharm's debugger to set breakpoints, step through code, and inspect variables — essential skills for finding and fixing bugs."
+description: "Learn how to use PyCharm's debugger to set breakpoints, step through code, and inspect variables. These are essential skills for finding and fixing bugs."
 weight: 20
 ---
 
-This guide teaches you the fundamentals of **debugging** in PyCharm. You'll learn how to pause your code mid-execution, inspect what's happening, and step through it line by line to find and fix bugs. Debugging is crucial when working with complex code, and especially so when troubleshooting other people's code.
+This guide teaches you the fundamentals of **debugging
+** in PyCharm. You'll learn how to pause your code mid-execution, inspect what's happening, and step through it line by line to find and fix bugs. Debugging is crucial when working with complex code, and especially so when troubleshooting other people's code.
 
 {{% notice note %}}
 This page assumes you have completed [Installing PyCharm, UV, and Python]({{< relref "01-install-pycharm-python" >}}) and have a working PyCharm project.
@@ -84,7 +85,7 @@ You can also toggle a breakpoint by placing your cursor on a line and pressing `
 
 ## 4. Start the debugger
 
-Running in **debug mode** is different from a normal run — it tells PyCharm to watch for your breakpoints.
+Running in **debug mode** is different from a normal run, this tells PyCharm to watch for your breakpoints.
 
 1. **Right-click** `debug_me.py` in the editor and select **Debug 'debug_me'** (not "Run").
    ![img.png](right_click_debug.png)
@@ -155,7 +156,7 @@ While paused, **hover your mouse over any variable** in the editor. PyCharm show
 
 ### Add a watch expression
 
-A **watch** lets you track a custom expression across steps — not just a single variable.
+A **watch** lets you track a custom expression across steps, not just a single variable.
 
 1. Type an expression, for example: `len(grades)` or `total / len(grades)`. Click the **+** icon.
    ![img_1.png](add_to_watch.png)
@@ -175,7 +176,7 @@ Now let's catch the `ZeroDivisionError` in action.
 1. **Stop** the debugger (click the red **Stop** button or press `Ctrl+F2` / `Cmd+F2`).
    ![img_1.png](stop_debugger.png)
 1. **Remove** your current breakpoint on line 10 (click the red dot to toggle it off).
-2. **Add a new breakpoint** on line 5 — the line `average = total / len(numbers)`.
+2. **Add a new breakpoint** on line 5, the line `average = total / len(numbers)`.
 3. **Debug** the file again (bug icon or right-click → Debug).
    ![img.png](debug_again.png)
 
@@ -185,7 +186,7 @@ Execution pauses at line 5 the first time inside the call with `grades`. Check t
 This looks fine. Press **F9** (Resume) to continue to the next time this breakpoint is hit.
 ![img.png](resume_program.png)
 
-Now execution pauses at line 5 again — this time inside the call with the empty list. Check the Variables tab:
+Now execution pauses at line 5 again inside the call with the empty list. Check the Variables tab:
 
 ![img.png](break_point_zero_list.png)
 
@@ -230,7 +231,7 @@ Sometimes a breakpoint fires too often. You can tell PyCharm to only pause when 
 1. **Right-click** a red breakpoint dot in the gutter.
 2. In the popup, enter a condition, for example: `len(numbers) == 0`.
 3. Click **Done**.
-    ![img.png](conditional_breakpoint.png)
+   ![img.png](conditional_breakpoint.png)
 4. Debug the file again.
 
 Now the debugger will only pause on that line when the list is empty. This is extremely useful when debugging loops or functions that get called many times.
