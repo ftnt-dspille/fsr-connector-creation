@@ -9,11 +9,14 @@ This section covers the Python concepts you need to build FortiSOAR connectors. 
 
 ---
 
+<!-- TODO - go through this whole section and add relevant pictuers, and clean up code
+  -->
+
 ## Prerequisites 
 
-You can run the exercises in **PyCharm** (recommended if you completed the [installation guide]({{% relref "01-install-pycharm-python" %}})). If you can't install PyCharm, you can use this free online python editor - [programiz.com/python-programming/online-compiler](https://www.programiz.com/python-programming/online-compiler/)
+You can run the exercises in **PyCharm** (recommended if you completed the [installation section]({{% relref "01-install-pycharm-python" %}})). If you can't install PyCharm, you can use this free online python editor - [programiz.com/python-programming/online-compiler](https://www.programiz.com/python-programming/online-compiler/)
 
-![img.png](online_ide.png)
+![img.png](../online_ide.png)
 
 
 {{% notice tip %}}
@@ -110,7 +113,7 @@ key = config.get("api_key", "default")  # With default value
 
 {{% notice note %}}
 Don't forget that you can click the copy button on the top right of the text below when you hover your mouse over it. 
-![img.png](copy_text.png)
+![img.png](../copy_text.png)
 {{% /notice %}}
 
 ```python
@@ -142,6 +145,11 @@ config = {
 
 print(config["server_url"])  # https://siem.example.com
 ```
+> Code solution
+![img.png](../exercise_1_code.png?classes=left)
+
+> Code run
+![img.png](../exercise_1_code_run.png?classes=left)
 
 {{% /expand %}}
 

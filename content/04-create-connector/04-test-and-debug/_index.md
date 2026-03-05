@@ -5,6 +5,8 @@ description: "Run each operation in the RDK, inspect the results, use breakpoint
 weight: 4
 ---
 
+<!-- TODO - finish this page -->
+
 Your connector has configuration, a health check, and three operations. In this chapter you'll run each one, inspect the live API responses, and use PyCharm's debugger to step through the code when something goes wrong.
 
 {{% notice note %}}

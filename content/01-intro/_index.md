@@ -1,6 +1,6 @@
 ---
 title: Introduction
-linkTitle: Introduction
+linkTitle: 1. Introduction
 weight: 10
 ---
 

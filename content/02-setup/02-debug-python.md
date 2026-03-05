@@ -1,7 +1,7 @@
 ---
 title: "Debug Python Code"
 description: "Learn how to use PyCharm's debugger to set breakpoints, step through code, and inspect variables. These are essential skills for finding and fixing bugs."
-weight: 20
+weight: 30
 ---
 
 This guide teaches you the fundamentals of **debugging

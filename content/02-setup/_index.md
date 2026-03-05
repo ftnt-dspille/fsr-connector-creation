@@ -1,5 +1,6 @@
 ---
 title: "Getting Started"
+linkTitle: "2. Getting Started"
 description: "Set up your Python development environment with PyCharm and uv."
 weight: 20
 ---

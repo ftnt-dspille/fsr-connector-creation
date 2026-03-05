@@ -1,144 +1,403 @@
 ---
-title: "Connector Contents Simplified"
-linkTitle: "Connector Contents - Simple"
-description: "A visual overview of the two core components every FortiSOAR connector has - configuration and operations - and how they map to the info.json file."
-weight: 30
+title: "Connector Contents"
+linkTitle: "Connector Contents"
+weight: 40
+description: "Understand how Configuration + Operations map to info.json, and validate your connector end-to-end."
 ---
 
-This page gives you a high-level tour of what makes up a FortiSOAR connector before you start building one. Every connector, no matter how complex, is built from two core components: **Configuration** and **Operations**.
+This page connects the **FortiSOAR UI** to the **connector files** you edit as a developer. Every connector, whether simple or complex, comes down to two building blocks:
 
-{{% notice note %}}
-**Prerequisites:** Before continuing, you should have a basic understanding of file and folder structure and be comfortable reading JSON. If you need a refresher on JSON, see the [Working with JSON]({{< relref "../03-python-primer#3-working-with-json" >}}) section of the Python Primer.
-{{% /notice %}}
+- **Configuration**: how FortiSOAR stores reusable connection/auth settings (URL, API key, etc.)
+- **Operations**: the actions the connector exposes to playbooks (Get Alerts, Block IP, Lookup Domain, etc.)
+
+By the end, you’ll be able to open an existing connector and answer:
+
+1) “Where does this UI field live in `info.json`?”
+2) “How does this playbook action map to code?”
 
 ---
 
-## 1. Configuration
+## Prerequisites
 
-The **Configuration** section defines how the connector authenticates and connects to an external system. Think of it as the connector's "settings page" that an admin fills in once so all operations can reuse the same connection details.
+### FortiSOAR 7.6.4+ requirement (BYOC)
 
-![img.png](alienvault_connector_configuration.png?height=400px)
+From FortiSOAR **7.6.4**, uploading/editing/debugging connectors requires enabling **Build Your Own Connector (BYOC)** under **Gear Icon > System Configuration → Advanced Development Features**.
 
-### What goes in a configuration?
+![img.png](764_requirements_connectors.png?height=600px)
 
-Every configuration stores reusable connection details. The most common fields are:
+---
+
+## Connector file structure
+
+At minimum, a connector contains 3 files:
+
+```bash
+connector/
+├── info.json
+├── connector.py
+└── operations.py
+````
+
+- `info.json`: defines what users see in the UI (fields, actions, labels, validation).
+- `connector.py` / `operations.py`: implements the behavior (auth, API calls, responses).
+
+> Mental model: **`info.json` defines the interface** (UI + action schema). **Python implements the behavior.**
+
+---
+
+## Part 1 - Configuration
+
+Configuration is the connector’s reusable connection/auth settings. An admin fills these in once, and all operations reuse them.
+
+![img.png](configuration_details.png?height=500px)
+
+### What usually goes into configuration?
+
+Common fields:
 
 | Field | Purpose | Example |
 |---|---|---|
-| **Server URL** | Base address of the external API | `https://otx.alienvault.com` |
-| **API Key** | Key passed in a header or query parameter | `a1b2c3d4e5...` |
-| **Username / Password** | Basic authentication credentials | `admin` / `********` |
-| **OAuth Token** | Token-based authentication for modern APIs | `Bearer eyJhbG...` |
-| **Verify SSL** | Whether to validate the server's SSL certificate | `true` / `false` |
-| **Port** | TCP port if the API uses a non-standard port | `8443` |
+| Server URL | Base address of the external API | `https://otx.alienvault.com` |
+| API Key | Token sent in a header/query | `a1b2c3...` |
+| Username/Password | Basic auth credentials | `admin` / `********` |
+| Verify SSL | Validate server certificate | `true` / `false` |
+| Port | Non-standard API port | `8443` |
 
-### Multiple configurations
+### Multiple configuration support
 
-A single connector can have **more than one configuration**. Click **Add Configuration** to create additional entries. This is useful when you need to connect to multiple instances of the same product, for example:
-
-- A **development** instance and a **production** instance
-- Separate instances in **different regions** or tenants
-- Different accounts with **different permission levels**
+A single connector can support **multiple configurations** (dev/prod, regions, tenants, different accounts).
 
 ### Health check
 
-Every configuration has a **health check** that validates whether the connector can actually reach the external system with the settings you provided. When you click the health check button, the connector makes a lightweight API call (usually to a `/ping` or
-`/health` endpoint) and reports success or failure.
+Each configuration can run a **health check** to confirm:
+
+- URL is reachable
+- credentials are valid
+- network path is open
 
 ![img.png](successful_health_check.png)
 
-A passing health check confirms three things: the URL is reachable, the credentials are valid, and the network path is open.
+---
+
+## Part 2 - Operations (the playbook actions)
+
+Operations are the actions your connector exposes to playbooks (e.g., “Get Alerts”, “Block IP”). Each operation typically maps to one or more API endpoints.
+
+![img.png](operation_to_connector.png?height=500px)
+
+Inside playbooks, operations appear as selectable actions with input fields:
+
+![img.png](operatio_to_playbook.png?height=500px)
+
+### Operation basics
+
+- Each action is a single **operation** (e.g., `get_alerts`, `block_ip`)
+- Operations use the chosen **configuration** (URL/credentials/etc.)
+- Operations accept **parameters** (inputs)
+- Operations return **JSON** to FortiSOAR (used by later playbook steps)
 
 ---
 
-## 2. Operations
+## Part 3 - How the UI maps to `info.json`
 
-The **Operations** section defines the actions a connector can perform. Each operation maps to a specific API endpoint on the external system and becomes available as a step in FortiSOAR playbooks.
+Everything you see under **Configuration** and **Actions & Playbooks** is defined in `info.json`.
 
-### How operations work
-
-- Each action is a **separate operation** (e.g., `get_ip_reputation`, `block_domain`, `search_alerts`).
-- Operations use the **configuration** you set up above to authenticate to the external system.
-- Most operations accept **parameters** - inputs that tell the operation what to act on (an IP address to look up, a domain to block, a search query to run).
-- Operations return **JSON** back to FortiSOAR, which playbooks can then use to make decisions, enrich records, or trigger follow-up actions.
----
-
-## 3. How it all maps to info.json
-
-Everything you see in the configuration and operations UI is defined in a single file: `info.json`. This is the heart of every connector.
-
-| UI Section                    | info.json Section         | What it defines                                                     |
-|-------------------------------|---------------------------|---------------------------------------------------------------------|
-| Connector name, version, logo | Top-level metadata        | `name`, `version`, `label`, `category`                              |
-| Configuration fields          | `configuration.fields`    | Each field (URL, API key, etc.) with its type, name, and validation |
-| Operations list               | `operations`              | Each action with its name, description, and parameters              |
-| Operation parameters          | `operations[].parameters` | Each input field for an operation (type, required, tooltip)         |
-
-{{% notice info %}}
-When you use the RDK's Configuration or Operations tabs, you're editing `info.json` through a visual interface. When you edit `info.json` directly in the code editor, the RDK tabs update to reflect your changes. They are two views of the same file.
-{{% /notice %}}
+| UI Section | `info.json` section | What it defines |
+|---|---|---|
+| Connector identity (name/version/logo) | Top-level metadata | `name`, `label`, `version`, `category`, icons |
+| Configuration page fields | `configuration.fields` | URL, API key, toggles, validation, required-ness |
+| Actions list | `operations` | action name/title/description/enabled |
+| Action input fields | `operations[].parameters` | each parameter field (type, required, tooltip) |
 
 ---
 
-## 4. Hands-on - Explore a real connector
+## `info.json` in depth
 
-Now that you understand the two components, let's look at a real connector from the FortiSOAR Content Hub.
+### 1) Metadata (top-level keys)
 
-### Step 1 - Find and install a connector
+These are the fields that identify the connector.
 
-1. In FortiSOAR, navigate to **Content Hub** and open the **Discover** tab.
-2. Browse or search for a connector that interests you. Some good ones to explore:
-   
-   | Connector          | Why it's interesting                             |
-   |--------------------|--------------------------------------------------|
-   | **AlienVault OTX** | Simple API key auth, several lookup operations   |
-   | **VirusTotal**     | Multiple operation types (IP, domain, file hash) |
-   | **AbuseIPDB**      | Clean example of a single-purpose connector      |
+#### Essential fields
 
-3. Click into the connector and click **Install**.
+| Field | Description | Example |
+|---|---|---|
+| `name` | internal API name (kebab-case) | `"sample-connector"` |
+| `label` | display name in UI | `"Sample Connector"` |
+| `version` | semantic version | `"1.0.0"` |
 
-### Step 2 - Analyze the configuration
+{{% expand title="All metadata fields" %}}
 
-Once installed, open the connector and look at its configuration page.
-
-- What fields does it require? (URL, API key, OAuth, something else?)
-- Does it have a **Verify SSL** toggle?
-- Run the **health check** - does it pass or fail? Why?
-
-### Step 3 - Analyze the operations
-
-Switch to the operations list.
-
-- How many operations does the connector have?
-- Pick one operation and look at its **parameters**. Which are required? Which are optional?
-- What kind of **JSON response** does the operation return?
-
-### Step 4 - Look at info.json
-
-Now open the connector in the editor and navigate to `info.json`.
-
-- Can you find the `configuration.fields` section? Do the fields match what you saw in the UI?
-- Can you find the `operations` array? Do the operation names match the actions you saw?
-- Pick one operation and compare its `parameters` array to the input fields in the UI.
-
-{{% expand "What similarities should you see?" %}}
-
-The structure should look familiar from this page:
-
-- The **configuration fields** in the UI map directly to objects in `configuration.fields`, each with a `name`, `type`, `required`, and `title`.
-- Each **operation** in the UI maps to an object in the `operations` array with an `operation` (API name), `title`, `description`, and `parameters` list.
-- The **parameters** for each operation follow the same structure as configuration fields - `name`, `type`, `required`, `editable`, `visible`, and optionally `tooltip` and `value`.
-
-This is the same structure you'll use when building your own connector in the next section.
+| Field | Description | Example |
+|---|---|---|
+| `description` | what the connector does | `"Connector description..."` |
+| `publisher` | publisher name/email | `"anonyges@gmail.com"` |
+| `cs_approved` | CS approved flag | `true/false` |
+| `cs_compatible` | CS compatible flag | `true/false` |
+| `category` | category array | `["Analytics and SIEM"]` |
+| `icon_small_name` | small icon filename | `"connector_logo_small.png"` |
+| `icon_large_name` | large icon filename | `"connector_logo_large.png"` |
 
 {{% /expand %}}
 
 ---
 
-## Key takeaways
+### 2) Configuration: `configuration.fields`
 
-- Every connector has two core parts: **Configuration** (connection settings) and **Operations** (actions).
-- Configuration stores reusable details like URLs and credentials. You can have multiple configurations per connector.
-- Operations are the actions playbooks call. They accept parameters and return JSON.
-- Everything is defined in `info.json` - the UI and the file are two views of the same data.
-- The **health check** validates your configuration before you run any operations.
+Each entry in `configuration.fields` becomes a field on the connector configuration page.
+
+Common keys you’ll use:
+
+{{% expand title="Configuration field keys" %}}
+
+| Key | Type | Description |
+|---|---|---|
+| `title` | string | Display name shown in UI |
+| `name` | string | Internal identifier used in code |
+| `type` | string | `text`, `password`, `checkbox`, `integer`, `json`, etc. |
+| `required` | boolean | Must be filled to save/run |
+| `editable` | boolean | Can user edit |
+| `visible` | boolean | Show/hide field |
+| `tooltip` / `description` | string | Help text |
+| `validation` | object | regex + error text |
+
+{{% /expand %}}
+
+Validation object:
+
+```json
+{
+  "pattern": "regex pattern for validation",
+  "patternError": "Error message if validation fails"
+}
+````
+
+Example:
+
+```json
+{
+  "configuration": {
+    "fields": [
+      {
+        "title": "URL",
+        "type": "text",
+        "name": "url",
+        "required": true,
+        "visible": true,
+        "editable": true,
+        "validation": {
+          "pattern": "^https?://...",
+          "patternError": "Server URL must begin with https and end without '/'. Port number can be added, e.g. https://example.com:80."
+        }
+      }
+    ]
+  }
+}
+```
+
+---
+
+### 3) Operations: `operations[]`
+
+Each object in `operations` becomes a playbook action.
+
+Operation structure:
+
+| Key           | Type    | Description                          |
+| ------------- | ------- | ------------------------------------ |
+| `operation`   | string  | internal operation id (used by code) |
+| `title`       | string  | display name in UI                   |
+| `description` | string  | what it does                         |
+| `parameters`  | array   | input fields for the action          |
+| `enabled`     | boolean | show/hide action                     |
+
+Parameter fields follow the same shape as configuration fields.
+
+Example:
+
+```json
+{
+  "operations": [
+    {
+      "operation": "get_alerts",
+      "title": "Get Alerts",
+      "description": "Gets sample alerts from Demo SIEM",
+      "parameters": [
+        {
+          "title": "Alert Index Start Time",
+          "type": "datetime",
+          "name": "start_time",
+          "required": true,
+          "visible": true,
+          "editable": true
+        },
+        {
+          "title": "Alert Index End Time",
+          "type": "datetime",
+          "name": "end_time",
+          "required": true,
+          "visible": true,
+          "editable": true
+        }
+      ],
+      "enabled": true
+    }
+  ]
+}
+```
+
+{{% notice note %}}
+Parameters aren’t always required, but they’re commonly used for filtering (time ranges, severity, query strings) and for “action” targets (IP/domain/user).
+{{% /notice %}}
+
+---
+
+## Hands-on labs
+
+### Lab 1 - Reverse-engineer a real connector (10–15 min)
+
+Goal: prove you can map the**UI → `info.json`** of a connector.
+
+1. Install a connector from the **Discover Tab** (example: AlienVault OTX).
+2. Open **Configurations**:
+    
+    * List the fields you see (URL, API key, Verify SSL, etc.).
+    * Run the **Health Check**. Note what “success” confirms.
+3. Open **Actions & Playbooks**:
+    * Identify an action
+      ![img.png](identify_alienvualt_action.png?height=400px)
+4. Open the connector’s `info.json`:
+    
+    * Find `configuration.fields` and confirm those fields match the UI.
+    * Find the `operations` entry for the action you chose and confirm the `parameters` match.
+
+Success criteria: you can point to the exact JSON object that created each UI field.
+
+{{% expand title="Stuck?" %}}
+
+1. In the **Discover Tab**, search for "AlienVault OTX" and install the connector.
+   
+   ![img.png](search_alienvault.png?height=500px&classes=inline)   ![img.png](install_alienvault.png?height=500px&classes=inline)
+2. Note the connector's **Configurations** fields
+   ![img.png](alienvault_config_fields.png)
+4. Edit the connector's `info.json` file.
+   ![img.png](edit_con_config.png)
+   ![img.png](config_edit.png)
+5. Locate `configuration.fields` and verify it matches the UI fields.
+   ![img.png](locate_form_view_fields.png)
+   ![img.png](json_view_con_fields.png)
+6. Find the `operations` entry for the chosen action and confirm parameter matches.
+   ![img.png](alienvault_operation_found.png)
+
+{{% /expand %}}
+
+---
+
+### Lab 2 - Make a tiny, safe edit (5 min)
+
+Goal: experience the “edit JSON → UI updates” loop.
+
+Pick ONE:
+
+* Add a tooltip to an existing configuration field, or
+* Change the `title` of an operation parameter (UI label only)
+
+Re-open the UI and confirm your change appears.
+
+Success criteria: you changed UI behavior without touching Python.
+
+{{% expand title="Stuck?" %}}
+
+#### Option A — Add a tooltip to a configuration field (recommended)
+
+1. Open the connector’s **Configurations** tab and identify a field to modify (for example, the **Server Address** or **API Key** field).
+   
+    ![img.png](server_address_hover.png)
+
+2. Open and edit the connector’s `info.json`.
+   
+   ![img.png](edit_con_config.png)
+   ![img.png](config_edit.png)
+
+3. Locate the `configuration.fields` section.
+   
+   ![img.png](locate_form_view_fields.png)
+   ![img.png](json_view_con_fields.png)
+
+4. In the field object you chose, add (or update) the tooltip key to display a help text
+   
+   Example (edit only the selected field object):
+   ```json
+   {
+     "name": "server_url",
+     "title": "Server Address",
+     "type": "text",
+     "required": true,
+     "tooltip": "Paste the base URL only (no trailing slash). Example: https://otx.alienvault.com"
+   }
+   ```
+
+5. Save `info.json`, return to **Configurations**, and confirm the tooltip/help text appears when you hover the info icon or focus the field.
+
+   ![img.png](alienvault_config_fields.png)
+
+---
+
+#### Option B — Change the UI label of an operation parameter
+
+1. Go to **Actions & Playbooks** and pick an action to inspect.
+
+   ![img.png](identify_alienvualt_action.png?height=400px)
+
+2. Open and edit the connector’s `info.json`.
+
+   ![img.png](edit_con_config.png)
+   ![img.png](config_edit.png)
+
+3. Find the matching `operations` entry for the action you selected, then locate its `parameters`.
+
+   ![img.png](alienvault_operation_found.png)
+
+4. Change the parameter’s `title` (this changes the label shown in the playbook UI—safe edit).
+
+   Example (edit only the `title`):
+
+   ```json
+   {
+     "name": "indicator_type",
+     "title": "Indicator Type (Domain/IP/URL)",
+     "type": "text",
+     "required": true
+   }
+   ```
+
+5. Save `info.json`, reopen the playbook action UI, and confirm the field label changed.
+
+---
+
+**If your change doesn’t show up**
+
+* Double-check you edited the correct connector/version (it’s easy to have multiple installed).
+* Confirm the JSON is valid (a missing comma/brace can prevent the UI from loading updates).
+* If the connector UI seems “stale,” refresh the page and re-open the connector configuration/action panel.
+
+{{% /expand %}}
+
+
+
+---
+
+### Lab 3 - Add one optional parameter (10–20 min)
+
+Goal: understand how “optional inputs” improve usability.
+
+1. Choose an existing operation (e.g., Get Alerts).
+
+2. Add an optional parameter such as:
+    
+    * `severity` (select), or
+    * `limit` (integer), or
+    * `query` (text)
+
+3. In code, read the parameter and pass it through to the API call (or log it for now if you’re stubbing).
+
+✅ Success criteria: parameter shows in playbook UI AND your operation can read it.

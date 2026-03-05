@@ -5,6 +5,8 @@ description: "Define three operations - Get Random Joke, Get Joke by ID, and Sea
 weight: 3
 ---
 
+<!-- TODO - finish this page -->
+
 Operations are the actions your connector exposes to FortiSOAR playbooks. In this chapter you'll create three operations, define their input parameters, and write the Python functions that call the Dad Joke API.
 
 ---
@@ -13,11 +15,11 @@ Operations are the actions your connector exposes to FortiSOAR playbooks. In thi
 
 Here's what we're building, mapped to the API endpoints:
 
-| Operation | API Endpoint | Parameters | Returns |
-|---|---|---|---|
-| **Get Random Joke** | `GET /` | *(none)* | A random joke with `id` and `joke` |
-| **Get Joke by ID** | `GET /j/<joke_id>` | `joke_id` (required) | A specific joke |
-| **Search Jokes** | `GET /search?term=<query>` | `search_term` (required), `limit` (optional) | A list of matching jokes |
+| Operation           | API Endpoint               | Parameters                                   | Returns                            |
+|---------------------|----------------------------|----------------------------------------------|------------------------------------|
+| **Get Random Joke** | `GET /`                    | *(none)*                                     | A random joke with `id` and `joke` |
+| **Get Joke by ID**  | `GET /j/<joke_id>`         | `joke_id` (required)                         | A specific joke                    |
+| **Search Jokes**    | `GET /search?term=<query>` | `search_term` (required), `limit` (optional) | A list of matching jokes           |
 
 ---
 
@@ -26,21 +28,24 @@ Here's what we're building, mapped to the API endpoints:
 ### Add the operation in the RDK
 
 1. In the RDK panel, click the **Operations** tab.
+    ![img.png](click_operations.png)
 2. Click **Add Operation**.
 3. Fill in the following:
 
-| Property | Value |
-|---|---|
-| **Title** | `Get Random Joke` |
-| **API Name** | `get_random_joke` (auto-generated) |
-| **Description** | `Fetches a random dad joke from the API.` |
-| **Enabled** | ✅ Checked |
+| Property                            | Value                                     |
+|-------------------------------------|-------------------------------------------|
+| **Display Name**                    | `Get Random Joke`                         |
+| **API Name**                        | `get_random_joke` (auto-generated)        |
+| **Description**                     | `Fetches a random dad joke from the API.` |
+| **Generate Default Operation Code** | 🔲 Unchecked                              |
 
+![img.png](first_operation.png)
 This operation has **no parameters** - it just returns a random joke.
 
-Click **Save**.
+Click **Create**.
 
 <!-- ![img.png](images/op_get_random_joke.png) -->
+![img.png](operation_created.png)
 
 ### Verify in info.json
 
@@ -48,17 +53,24 @@ Open `info.json` and confirm the operation appears in the `operations` array:
 
 ```json
 {
-    "operations": [
-        {
-            "operation": "get_random_joke",
-            "title": "Get Random Joke",
-            "description": "Fetches a random dad joke from the API.",
-            "parameters": [],
-            "enabled": true
-        }
-    ]
+  "operations": [
+    {
+      "operation": "get_random_joke",
+      "title": "Get Random Joke",
+      "annotation": "get_random_joke",
+      "description": "Fetches a random dad joke from the API.",
+      "category": "investigation",
+      "is_config_required": true,
+      "visible": true,
+      "enabled": true,
+      "output_schema": {},
+      "parameters": []
+    }
+  ]
 }
 ```
+
+![img.png](img.png)
 
 ### Write the Python function
 
@@ -70,7 +82,7 @@ def get_random_joke(config, params):
     return _make_request(config)
 ```
 
-That's it - one line. The `_make_request` helper already calls the base URL (`/`) which returns a random joke.
+That's it! The `_make_request` helper already calls the base URL (`/`) which returns a random joke.
 
 ---
 
@@ -81,12 +93,13 @@ That's it - one line. The `_make_request` helper already calls the base URL (`/`
 1. Click **Add Operation** again.
 2. Fill in:
 
-| Property | Value |
-|---|---|
-| **Title** | `Get Joke by ID` |
-| **API Name** | `get_joke_by_id` |
-| **Description** | `Fetches a specific dad joke by its unique ID.` |
-| **Enabled** | ✅ Checked |
+| Property                            | Value                                           |
+|-------------------------------------|-------------------------------------------------|
+| **Display Name**                    | `Get Joke by ID`                                |
+| **API Name**                        | `get_joke_by_id`                                |
+| **Description**                     | `Fetches a specific dad joke by its unique ID.` |
+| **Generate Default Operation Code** | 🔲 Unchecked                                    |
+
 
 ### Add the parameter
 
@@ -95,15 +108,15 @@ This operation needs a **joke_id** parameter so the user can specify which joke 
 1. In the operation you just created, click **Add Parameter**.
 2. Fill in:
 
-| Property | Value |
-|---|---|
-| **Title** | `Joke ID` |
-| **API Name** | `joke_id` |
-| **Type** | `Text` |
-| **Required** | ✅ Checked |
-| **Editable** | ✅ Checked |
-| **Visible** | ✅ Checked |
-| **Tooltip** | `The unique ID of the joke to retrieve (e.g., R7UfaahVfFd).` |
+| Property         | Value                                                        |
+|------------------|--------------------------------------------------------------|
+| **Display Name** | `Joke ID`                                                    |
+| **API Name**     | `joke_id`                                                    |
+| **Type**         | `Text`                                                       |
+| **Required**     | ✅ Checked                                                    |
+| **Editable**     | ✅ Checked                                                    |
+| **Visible**      | ✅ Checked                                                    |
+| **Tooltip**      | `The unique ID of the joke to retrieve (e.g., R7UfaahVfFd).` |
 
 <!-- ![img.png](images/op_get_joke_by_id.png) -->
 
@@ -155,12 +168,12 @@ Notice how we read the parameter: `params.get("joke_id")`. The key `"joke_id"` m
 1. Click **Add Operation** one more time.
 2. Fill in:
 
-| Property | Value |
-|---|---|
-| **Title** | `Search Jokes` |
-| **API Name** | `search_jokes` |
-| **Description** | `Searches for dad jokes matching a keyword. Returns a paginated list of results.` |
-| **Enabled** | ✅ Checked |
+| Property         | Value                                                                             |
+|------------------|-----------------------------------------------------------------------------------|
+| **Display Name** | `Search Jokes`                                                                    |
+| **API Name**     | `search_jokes`                                                                    |
+| **Description**  | `Searches for dad jokes matching a keyword. Returns a paginated list of results.` |
+| **Enabled**      | ✅ Checked                                                                         |
 
 ### Add the parameters
 
@@ -171,31 +184,31 @@ This operation needs two parameters - a required search term and an optional res
 1. Click **Add Parameter**.
 2. Fill in:
 
-| Property | Value |
-|---|---|
-| **Title** | `Search Term` |
-| **API Name** | `search_term` |
-| **Type** | `Text` |
-| **Required** | ✅ Checked |
-| **Editable** | ✅ Checked |
-| **Visible** | ✅ Checked |
-| **Tooltip** | `The keyword to search for (e.g., "cat", "hipster", "dog").` |
+| Property         | Value                                                        |
+|------------------|--------------------------------------------------------------|
+| **Display Name** | `Search Term`                                                |
+| **API Name**     | `search_term`                                                |
+| **Type**         | `Text`                                                       |
+| **Required**     | ✅ Checked                                                    |
+| **Editable**     | ✅ Checked                                                    |
+| **Visible**      | ✅ Checked                                                    |
+| **Tooltip**      | `The keyword to search for (e.g., "cat", "hipster", "dog").` |
 
 **Parameter 2 - Limit:**
 
 1. Click **Add Parameter** again.
 2. Fill in:
 
-| Property | Value |
-|---|---|
-| **Title** | `Limit` |
-| **API Name** | `limit` |
-| **Type** | `Integer` |
-| **Required** | ❌ Unchecked |
-| **Editable** | ✅ Checked |
-| **Visible** | ✅ Checked |
-| **Default Value** | `20` |
-| **Tooltip** | `Maximum number of results to return (1–30). Defaults to 20.` |
+| Property          | Value                                                         |
+|-------------------|---------------------------------------------------------------|
+| **Display Name**  | `Limit`                                                       |
+| **API Name**      | `limit`                                                       |
+| **Type**          | `Integer`                                                     |
+| **Required**      | ❌ Unchecked                                                   |
+| **Editable**      | ✅ Checked                                                     |
+| **Visible**       | ✅ Checked                                                     |
+| **Default Value** | `20`                                                          |
+| **Tooltip**       | `Maximum number of results to return (1–30). Defaults to 20.` |
 
 <!-- ![img.png](images/op_search_jokes.png) -->
 

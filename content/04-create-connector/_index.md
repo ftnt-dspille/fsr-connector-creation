@@ -1,6 +1,6 @@
 ---
 title: "Build Your First Connector"
-linkTitle: "Build Your First Connector"
+linkTitle: "3. Build Your First Connector"
 description: "A step-by-step walkthrough of building a FortiSOAR connector from scratch - from creating the project to testing live API calls - using the free Dad Joke API."
 weight: 40
 ---
@@ -15,9 +15,9 @@ This section assumes you have completed the [setup guides]({{< relref "02-setup"
 
 ### The API we're using
 
-We'll build a connector for [icanhazdadjoke.com](https://icanhazdadjoke.com/api) - a free, public API that requires **no authentication**. This lets us focus on connector mechanics without worrying about API keys or credentials.
+We'll build a connector for [icanhazdadjoke.com](https://icanhazdadjoke.com/api). This is a free API that doesn't require authentication. This means we can focus on building a simple connector without worrying about API keys. 
 
-The API has three endpoints we'll wrap as connector operations:
+The API has three endpoints we'll use for our connector: 
 
 | Endpoint | Method | What it does |
 |---|---|---|
@@ -28,22 +28,22 @@ The API has three endpoints we'll wrap as connector operations:
 All endpoints return JSON when you send the header `Accept: application/json`.
 
 {{% notice tip %}}
-Even though this is a joke API, the patterns you learn here - configuration fields, operation parameters, HTTP requests, error handling - are exactly the same ones you'll use for security connectors like VirusTotal, AbuseIPDB, or any other REST API.
+Even though this is a joke API, everything you learn here from configuration fields, operation parameters, and HTTP requests is directly applicable to tools like FortiManager, NSlookup, or any other REST API.
 {{% /notice %}}
 
 ---
 
 ### What we're building
 
-By the end of this section your connector will have:
+By the end of this section your connector will have a connector that requires a configuration for server url and a header, which performs a health check, and three operations/actions:
 
-| Feature | Details |
-|---|---|
-| **Configuration** | Server URL and a custom User-Agent header |
-| **Health Check** | Verifies the API is reachable |
-| **Operation 1** | **Get Random Joke** - fetches a random dad joke |
-| **Operation 2** | **Get Joke by ID** - fetches a specific joke using its ID |
-| **Operation 3** | **Search Jokes** - searches for jokes by keyword with pagination |
+| Feature           | Details                                                          |
+|-------------------|------------------------------------------------------------------|
+| **Configuration** | Server URL and a custom User-Agent header                        |
+| **Health Check**  | Verifies the API is reachable                                    |
+| **Operation 1**   | **Get Random Joke** - fetches a random dad joke                  |
+| **Operation 2**   | **Get Joke by ID** - fetches a specific joke using its ID        |
+| **Operation 3**   | **Search Jokes** - searches for jokes by keyword with pagination |
 
 ---
 
