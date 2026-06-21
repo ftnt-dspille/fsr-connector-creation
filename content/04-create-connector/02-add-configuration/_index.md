@@ -205,6 +205,17 @@ Let's break this down:
 
 ---
 
+## Configure the Configuration in the RDK
+
+1. Select the **Configure** Tab in the RDK.
+2. Add a **Config Name** of `Dad_Joke_Config`
+    ![img.png](add_config_to_config.png)
+{{% notice  %}}
+
+{{% /notice %}}
+3. Click **Save** to confirm.
+    ![img.png](confirm_save_config.png)
+
 ## 5. Implement the health check
 
 The **health check** runs when an admin clicks **Test Configuration** in FortiSOAR. It should verify that the API is reachable with the given settings.

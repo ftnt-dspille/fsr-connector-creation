@@ -277,7 +277,7 @@ Now we need to tell `connector.py` how to route incoming operations to the corre
 Open `connector.py` and replace its contents with:
 
 ```python
-from connectors.core.connector import Connector
+from connectors.core.connector import Connector, ConnectorError
 from .operations import (
     check_health,
     get_random_joke,

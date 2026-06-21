@@ -21,8 +21,7 @@ While FortiSOAR provides 700+ pre-built connectors, you might need a custom conn
 
 - You're integrating with a proprietary or custom in-house tool
 - You need specific functionality not available in existing connectors (e.g., a connectors missing actions)
-- You want to combine multiple API calls into a single action to simplify the playbook logic
-- Your organization has unique integration requirements
+- You want to move more advanced python logic to a connector
 
 ## Hands on
 

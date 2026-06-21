@@ -50,12 +50,12 @@ The **New FortiSOAR Connector** dialog appears.
 
 Enter the following values in the dialog:
 
-| Parameter | Value | Notes |
-|---|---|---|
-| **Display Name** | `Dad Jokes` | The name users see in FortiSOAR. |
-| **API Name** | `dad-jokes` | Auto-generated from the display name. Must be unique. |
-| **Version** | `1.0.0` | Semantic versioning (`major.minor.patch`). |
-| **Description** | `Fetches dad jokes from the icanhazdadjoke.com API.` | Shown on the connector listing page. |
+| Parameter        | Value                                                | Notes                                                 |
+|------------------|------------------------------------------------------|-------------------------------------------------------|
+| **Display Name** | `Dad Jokes`                                          | The name users see in FortiSOAR.                      |
+| **API Name**     | `dad-jokes`                                          | Auto-generated from the display name. Must be unique. |
+| **Version**      | `1.0.0`                                              | Semantic versioning (`major.minor.patch`).            |
+| **Description**  | `Fetches dad jokes from the icanhazdadjoke.com API.` | Shown on the connector listing page.                  |
 
 Click **OK**.
 ![img.png](new_connector_dialog.png)
@@ -173,6 +173,10 @@ The Details tab has several action buttons at the bottom. Here's what they do:
 
 ![img.png](actions_buttons.png?height=300px)
 ---
+
+## Connector Contents Breakdown
+
+![img.png](connector_contents_breakdown.png)
 
 ## Summary
 

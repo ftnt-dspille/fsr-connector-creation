@@ -21,16 +21,12 @@ The FortiSOAR RDK enables full local development of connectors using PyCharm. Th
 | Category                  | Connector Wizard                         | FortiSOAR RDK                  |
 |:--------------------------|------------------------------------------|--------------------------------|
 | Primary use               | Prototyping, simple integrations         | Production, complex connectors |
-| Development environment   | FortiSOAR UI                             | Local IDE (PyCharm 2024.1+)    |
-| Code editing              | Web editor                               | Full IDE                       |
+| Code editing              | Web editor                               | Full IDE (PyCharm 2024.1+)     |
 | Debugging                 | None                                     | Full debugging                 |
-| Code complexity           | Low–moderate                             | Moderate–high                  |
 | Version control           | Manual / export-based                    | Native Git                     |
-| Team collaboration        | Limited                                  | Strong                         |
 | Testing                   | In-instance                              | IDE-driven                     |
 | AI-assisted development   | FortiAI for new connectors, not existing | Supported (BYO AI)             |
 | Setup effort              | Minimal                                  | Moderate                       |
-| Long-term maintainability | Limited                                  | High                           |
 
 {{% notice note %}}
 These approaches are **not mutually exclusive**. You can start with the Wizard to create a connector, and then import it into the RDK for full development capabilities. Or vice versa.

@@ -22,9 +22,9 @@ Before testing operations, always verify the configuration first.
 1. In the RDK panel, go to the **Configuration** tab.
 2. Confirm the values:
 
-   | Field | Value |
-   |---|---|
-   | **Server URL** | `https://icanhazdadjoke.com` |
+   | Field          | Value                                      |
+   |----------------|--------------------------------------------|
+   | **Server URL** | `https://icanhazdadjoke.com`               |
    | **User-Agent** | `FortiSOAR Dad Jokes Connector (workshop)` |
 
 3. Click the **Run** button (health check).
@@ -42,8 +42,15 @@ If it fails, check:
 ## 2. Test Get Random Joke
 
 1. Switch to the **Operations** tab in the RDK panel.
-2. Select **Get Random Joke** from the operation dropdown.
-3. This operation has no parameters, so click **Execute Action** right away.
+2. For the **Get Random Joke** action, click **Execute Action** from the operation dropdown.
+    ![img.png](Execute_Action.png)
+3. This operation has no parameters, so click **Save**
+    ![img.png](click_save_on_exceute.png)
+{{% notice warning %}}
+Make sure you have a Configuration Selected before saving.
+{{% /notice %}}
+4. At the top, click **Current File > Dad Jokes > Play**
+    ![img.png](execute_action_launch_sequence.png)
 
 You should see a JSON response like this in the output panel:
 
@@ -96,10 +103,10 @@ This confirms our `_make_request` error handling is working. `response.raise_for
 1. Select **Search Jokes** from the operation dropdown.
 2. Fill in the parameters:
 
-   | Parameter | Value |
-   |---|---|
+   | Parameter       | Value |
+   |-----------------|-------|
    | **Search Term** | `cat` |
-   | **Limit** | `5` |
+   | **Limit**       | `5`   |
 
 3. Click **Execute Action**.
 
@@ -132,11 +139,11 @@ Expected output (your results may vary):
 
 Try a few more searches to explore the API:
 
-| Search Term | What you'll find |
-|---|---|
-| `hipster` | 2 jokes about hipsters |
-| `dog` | Several dog-related jokes |
-| `math` | Math puns |
+| Search Term | What you'll find                                     |
+|-------------|------------------------------------------------------|
+| `hipster`   | 2 jokes about hipsters                               |
+| `dog`       | Several dog-related jokes                            |
+| `math`      | Math puns                                            |
 | `asdfghjkl` | An empty results list (great for testing edge cases) |
 
 ---
@@ -164,20 +171,20 @@ PyCharm pauses execution at your breakpoint. The line is highlighted in blue.
 
 Use the debugger controls to walk through the function:
 
-| Step | Press | What you'll see                                                                     |
-|---|---|-------------------------------------------------------------------------------------|
-| 1 | `F8` (Step Over) | `search_term` now equals `"dog"` in the Variables tab.                              |
-| 2 | `F8` | The `if not search_term` check is skipped (it has a value).                         |
-| 3 | `F8` | `query_params` is created: `{"term": "dog"}`.                                       |
-| 4 | `F8` | `limit` equals `3`.                                                                 |
-| 5 | `F8` | `query_params` is now `{"term": "dog", "limit": 3}`.                                |
-| 6 | `F7` (Step Into) | Jump into `_make_request`.                                                          |
-| 7 | `F8` | Watch `url` become `"https://icanhazdadjoke.com/search"`.                           |
-| 8 | `F8` | Watch `headers` populate with your User-Agent.                                      |
-| 9 | `F8` | The `requests.get(...)` call fires. Watch `response` appear.                        |
-| 10 | `F8` | `response.raise_for_status()` passes (status 200).                                  |
-| 11 | `F8` | `response.json()` parses the JSON. Expand it in the Variables tab to see the jokes. |
-| 12 | `F9` (Resume) | Execution finishes. The result appears in the RDK output panel.                     |
+| Step | Press            | What you'll see                                                                     |
+|------|------------------|-------------------------------------------------------------------------------------|
+| 1    | `F8` (Step Over) | `search_term` now equals `"dog"` in the Variables tab.                              |
+| 2    | `F8`             | The `if not search_term` check is skipped (it has a value).                         |
+| 3    | `F8`             | `query_params` is created: `{"term": "dog"}`.                                       |
+| 4    | `F8`             | `limit` equals `3`.                                                                 |
+| 5    | `F8`             | `query_params` is now `{"term": "dog", "limit": 3}`.                                |
+| 6    | `F7` (Step Into) | Jump into `_make_request`.                                                          |
+| 7    | `F8`             | Watch `url` become `"https://icanhazdadjoke.com/search"`.                           |
+| 8    | `F8`             | Watch `headers` populate with your User-Agent.                                      |
+| 9    | `F8`             | The `requests.get(...)` call fires. Watch `response` appear.                        |
+| 10   | `F8`             | `response.raise_for_status()` passes (status 200).                                  |
+| 11   | `F8`             | `response.json()` parses the JSON. Expand it in the Variables tab to see the jokes. |
+| 12   | `F9` (Resume)    | Execution finishes. The result appears in the RDK output panel.                     |
 
 <!-- ![img.png](images/debug_stepping.png) -->
 
@@ -207,14 +214,14 @@ This is exactly how you'll debug real connector failures. You will often set a b
 
 ## 7. Common issues and troubleshooting
 
-| Symptom | Likely cause | Fix                                                                                   |
-|---|---|---------------------------------------------------------------------------------------|
-| `ConnectorError: Cannot connect to...` | No internet, firewall blocking, or wrong URL. | Check network access. Verify the Server URL.                                          |
-| `ConnectorError: API error: 404 Not Found` | Invalid joke ID or wrong endpoint path. | Check the `endpoint` string in your function.                                         |
-| `KeyError: 'server_url'` | The field `name` in `info.json` doesn't match the key used in `operations.py`. | Ensure `"name": "server_url"` in config fields.                                       |
-| `ModuleNotFoundError: requests` | The `requests` library isn't installed. | Click **Install Requirements** in the RDK Details tab, or run `pip install requests`. |
-| Operation not found / unknown | The `operation` key in `info.json` doesn't match the key in `OPERATION_MAP`. | Compare the strings exactly, they're case-sensitive.                                  |
-| Health check passes but operations fail | Health check uses `/` but the operation might use a different endpoint. | Debug the specific operation to see which URL is called.                              |
+| Symptom                                    | Likely cause                                                                   | Fix                                                                                   |
+|--------------------------------------------|--------------------------------------------------------------------------------|---------------------------------------------------------------------------------------|
+| `ConnectorError: Cannot connect to...`     | No internet, firewall blocking, or wrong URL.                                  | Check network access. Verify the Server URL.                                          |
+| `ConnectorError: API error: 404 Not Found` | Invalid joke ID or wrong endpoint path.                                        | Check the `endpoint` string in your function.                                         |
+| `KeyError: 'server_url'`                   | The field `name` in `info.json` doesn't match the key used in `operations.py`. | Ensure `"name": "server_url"` in config fields.                                       |
+| `ModuleNotFoundError: requests`            | The `requests` library isn't installed.                                        | Click **Install Requirements** in the RDK Details tab, or run `pip install requests`. |
+| Operation not found / unknown              | The `operation` key in `info.json` doesn't match the key in `OPERATION_MAP`.   | Compare the strings exactly, they're case-sensitive.                                  |
+| Health check passes but operations fail    | Health check uses `/` but the operation might use a different endpoint.        | Debug the specific operation to see which URL is called.                              |
 
 ---
 
