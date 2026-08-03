@@ -56,12 +56,21 @@ Here are the two fields you'll add, with their properties:
 | **Required**     | ✅ Checked                                                                                            |
 | **Visible**      | ✅ Checked                                                                                            |
 
+<!--
+  Do not put a same-page anchor link -- [text](#some-heading) -- inside a tab.
+  relearn's link hook resolves the fragment via the page's own Fragments while
+  the search index is reading that same page's .Plain, and Hugo's content cache
+  deadlocks. The build then hangs until the template timeout, and reports it as
+  "partial stylesheet.html timed out ... infinite recursion", which points at
+  the theme instead of the link. Reproduced on Hugo 0.145/0.147/0.164 and on
+  relearn 9.0.3, so upgrading does not help. Refer to sections by name instead.
+-->
 {{% tabs groupid="ide" %}}
 {{% tab title="VSCode" %}}
 In VSCode you edit `info.json` directly -- the extension provides JSON-schema autocomplete and inline validation for the standard fields.
 
 1. Open `info.json` in the editor.
-2. Replace the empty `"configuration": {}` with a `fields` array containing the two fields from the tables above. The expected result is shown in [section 3](#3-verify-in-infojson) below.
+2. Replace the empty `"configuration": {}` with a `fields` array containing the two fields from the tables above. The expected result is shown in section 3, **Verify in info.json**, below.
 3. Save the file (`Cmd+S` / `Ctrl+S`).
 
 Right-clicking the connector in the tree gives you every connector-level action:
