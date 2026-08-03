@@ -1,0 +1,59 @@
+{
+  "theme": "dark",
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "shots": [
+    {
+      "id": "connector-tree",
+      "ok": true,
+      "doc": "02-setup/01-install-vscode-extension.md -- the FortiSOAR Connectors view"
+    },
+    {
+      "id": "command-palette",
+      "ok": true,
+      "doc": "02-setup/01-install-vscode-extension.md -- Command Palette → FortiSOAR: …"
+    },
+    {
+      "id": "connector-context-menu",
+      "ok": true,
+      "doc": "04-create-connector/* -- right-click the connector → Configure / Export"
+    },
+    {
+      "id": "operation-context-menu",
+      "ok": true,
+      "doc": "04-create-connector/04-test-and-debug -- right-click an operation → Run Operation"
+    },
+    {
+      "id": "walkthrough",
+      "ok": true,
+      "doc": "02-setup/01-install-vscode-extension.md -- the guided walkthrough table"
+    },
+    {
+      "id": "new-connector-prompt",
+      "ok": true,
+      "doc": "04-create-connector/01-create-connector -- the first New Connector prompt"
+    },
+    {
+      "id": "configure-form",
+      "ok": true,
+      "doc": "04-create-connector/02-add-configuration §5 -- the Configure Connector form"
+    },
+    {
+      "id": "run-form",
+      "ok": true,
+      "doc": "04-create-connector/04-test-and-debug §3 -- the operation parameter form"
+    },
+    {
+      "id": "run-output",
+      "ok": true,
+      "doc": "04-create-connector/04-test-and-debug -- results in the FortiSOAR Output channel"
+    },
+    {
+      "id": "export-validation",
+      "ok": true,
+      "doc": "04-create-connector/04-test-and-debug §9 -- pre-export validation issues"
+    }
+  ]
+}

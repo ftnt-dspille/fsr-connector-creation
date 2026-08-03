@@ -25,10 +25,30 @@ Here's what we're building, mapped to the API endpoints:
 
 ## Operation 1 - Get Random Joke
 
-### Add the operation in the RDK
+### Add the operation
 
+This operation has **no parameters** - it just returns a random joke.
+
+{{% tabs groupid="ide" %}}
+{{% tab title="VSCode" %}}
+Right-click the connector in the **FortiSOAR Connectors** view → **Add Operation** (or Command Palette → **`FortiSOAR: Add Operation`**).
+
+Answer the prompts:
+
+| Prompt              | Value                                     |
+|---------------------|-------------------------------------------|
+| **Operation name**  | `get_random_joke`                         |
+| **Display title**   | `Get Random Joke`                         |
+| **Description**     | `Fetches a random dad joke from the API.` |
+| **Parameters**      | None -- skip when prompted                 |
+
+The command atomically appends the operation to `info.json` **and** inserts a `def get_random_joke(config, params):` stub in `operations.py` (registered in `operation_map`). The new function opens in the editor with your cursor on the `def` line -- ready for you to fill in the body (shown below).
+
+{{< shot connector-context-menu "Add Operation on the connector right-click menu" >}}
+{{% /tab %}}
+{{% tab title="PyCharm" %}}
 1. In the RDK panel, click the **Operations** tab.
-    ![img.png](click_operations.png)
+   ![img.png](click_operations.png)
 2. Click **Add Operation**.
 3. Fill in the following:
 
@@ -40,12 +60,12 @@ Here's what we're building, mapped to the API endpoints:
 | **Generate Default Operation Code** | 🔲 Unchecked                              |
 
 ![img.png](first_operation.png)
-This operation has **no parameters** - it just returns a random joke.
 
 Click **Create**.
 
-<!-- ![img.png](images/op_get_random_joke.png) -->
 ![img.png](operation_created.png)
+{{% /tab %}}
+{{% /tabs %}}
 
 ### Verify in info.json
 
@@ -84,12 +104,51 @@ def get_random_joke(config, params):
 
 That's it! The `_make_request` helper already calls the base URL (`/`) which returns a random joke.
 
+{{% notice tip %}}
+**VSCode:** If you used **Add Operation**, the function stub is already in `operations.py` -- just replace the `pass` body with the `return _make_request(config)` line above.
+{{% /notice %}}
+
 ---
 
 ## Operation 2 - Get Joke by ID
 
-### Add the operation in the RDK
+### Add the operation
 
+This operation needs a **joke_id** parameter so the user can specify which joke to fetch.
+
+{{% tabs groupid="ide" %}}
+{{% tab title="VSCode" %}}
+Right-click the connector → **Add Operation**.
+
+Answer the prompts:
+
+| Prompt              | Value                                           |
+|---------------------|-------------------------------------------------|
+| **Operation name**  | `get_joke_by_id`                                |
+| **Display title**   | `Get Joke by ID`                                |
+| **Description**     | `Fetches a specific dad joke by its unique ID.` |
+| **Parameters**      | Add one (see below)                             |
+
+When prompted for parameters, choose **Add a parameter** and answer:
+
+| Parameter prompt | Value    |
+|------------------|----------|
+| **name**         | `joke_id` |
+| **type**         | `text`   |
+| **required?**    | `Required` |
+
+then choose **Done -- finish operation**.
+
+The command atomically adds the operation + parameter to `info.json` and inserts the stub in `operations.py`.
+
+{{% notice note %}}
+Add Operation asks only for name, type, and required. It derives the parameter
+**title** from the name (`joke_id` → `Joke Id`) and has no prompt for a tooltip
+or a default value. To get the `Joke ID` title and the tooltip below, edit
+`info.json` afterwards -- it's a plain JSON file with schema autocomplete.
+{{% /notice %}}
+{{% /tab %}}
+{{% tab title="PyCharm" %}}
 1. Click **Add Operation** again.
 2. Fill in:
 
@@ -100,10 +159,7 @@ That's it! The `_make_request` helper already calls the base URL (`/`) which ret
 | **Description**                     | `Fetches a specific dad joke by its unique ID.` |
 | **Generate Default Operation Code** | 🔲 Unchecked                                    |
 
-
 ### Add the parameter
-
-This operation needs a **joke_id** parameter so the user can specify which joke to fetch.
 
 1. In the operation you just created, click **Add Parameter**.
 2. Fill in:
@@ -118,9 +174,9 @@ This operation needs a **joke_id** parameter so the user can specify which joke 
 | **Visible**      | ✅ Checked                                                    |
 | **Tooltip**      | `The unique ID of the joke to retrieve (e.g., R7UfaahVfFd).` |
 
-<!-- ![img.png](images/op_get_joke_by_id.png) -->
-
 Click **Save**.
+{{% /tab %}}
+{{% /tabs %}}
 
 ### Verify in info.json
 
@@ -157,14 +213,48 @@ def get_joke_by_id(config, params):
     return _make_request(config, endpoint=f"/j/{joke_id}")
 ```
 
-Notice how we read the parameter: `params.get("joke_id")`. The key `"joke_id"` matches the **API Name** we set in the RDK. This is how FortiSOAR passes user input to your function.
+Notice how we read the parameter: `params.get("joke_id")`. The key `"joke_id"` matches the **API Name** we set in the operation. This is how FortiSOAR passes user input to your function.
 
 ---
 
 ## Operation 3 - Search Jokes
 
-### Add the operation in the RDK
+### Add the operation
 
+This operation needs two parameters - a required search term and an optional result limit.
+
+{{% tabs groupid="ide" %}}
+{{% tab title="VSCode" %}}
+Right-click the connector → **Add Operation**.
+
+Answer the prompts:
+
+| Prompt              | Value                                                                             |
+|---------------------|-----------------------------------------------------------------------------------|
+| **Operation name**  | `search_jokes`                                                                    |
+| **Display title**   | `Search Jokes`                                                                    |
+| **Description**     | `Searches for dad jokes matching a keyword. Returns a paginated list of results.` |
+| **Parameters**      | Add two (see below)                                                               |
+
+When prompted for parameters, add two:
+
+| Parameter prompt | Parameter 1   | Parameter 2 |
+|------------------|---------------|-------------|
+| **name**         | `search_term` | `limit`     |
+| **type**         | `text`        | `integer`   |
+| **required?**    | `Required`    | `Optional`  |
+
+Choose **Add another parameter** between the two, then **Done -- finish operation**.
+
+The command atomically adds the operation + both parameters to `info.json` and inserts the stub in `operations.py`.
+
+{{% notice note %}}
+As with `joke_id`, the tooltips and Limit's default value of `20` are not
+reachable through the prompts -- add them by editing `info.json` (the shape is
+shown below).
+{{% /notice %}}
+{{% /tab %}}
+{{% tab title="PyCharm" %}}
 1. Click **Add Operation** one more time.
 2. Fill in:
 
@@ -176,8 +266,6 @@ Notice how we read the parameter: `params.get("joke_id")`. The key `"joke_id"` m
 | **Enabled**      | ✅ Checked                                                                         |
 
 ### Add the parameters
-
-This operation needs two parameters - a required search term and an optional result limit.
 
 **Parameter 1 - Search Term:**
 
@@ -208,11 +296,11 @@ This operation needs two parameters - a required search term and an optional res
 | **Editable**      | ✅ Checked                                                     |
 | **Visible**       | ✅ Checked                                                     |
 | **Default Value** | `20`                                                          |
-| **Tooltip**       | `Maximum number of results to return (1–30). Defaults to 20.` |
-
-<!-- ![img.png](images/op_search_jokes.png) -->
+| **Tooltip**       | `Maximum number of results to return (1-30). Defaults to 20.` |
 
 Click **Save**.
+{{% /tab %}}
+{{% /tabs %}}
 
 ### Verify in info.json
 
@@ -274,6 +362,47 @@ Here the `params` dict from the `_make_request` helper gets passed as **query st
 
 Now we need to tell `connector.py` how to route incoming operations to the correct function.
 
+{{% tabs groupid="ide" %}}
+{{% tab title="VSCode" %}}
+If you used **Add Operation** for each operation, the `operation_map` dict in `operations.py` already maps all three operation names to their functions. You just need to update `connector.py` to route through it.
+
+Open `connector.py` and replace its contents with:
+
+```python
+from connectors.core.connector import Connector, ConnectorError
+from .operations import (
+    check_health,
+    get_random_joke,
+    get_joke_by_id,
+    search_jokes,
+)
+
+# Map operation API names to their functions
+OPERATION_MAP = {
+    "get_random_joke": get_random_joke,
+    "get_joke_by_id": get_joke_by_id,
+    "search_jokes": search_jokes,
+}
+
+
+class DadJokes(Connector):
+
+    def execute(self, config, operation, params, **kwargs):
+        """Route to the correct operation function."""
+        action = OPERATION_MAP.get(operation)
+        if action:
+            return action(config, params)
+        raise ConnectorError(f"Unknown operation: {operation}")
+
+    def check_health(self, config):
+        return check_health(config)
+```
+
+{{% notice tip %}}
+The `OPERATION_MAP` above mirrors what the **Add Operation** command already maintains in `operations.py`'s `operation_map` dict. Both patterns work -- this approach keeps the routing logic visible in `connector.py` for teaching purposes. In production, you can let the extension manage `operation_map` and simply import it.
+{{% /notice %}}
+{{% /tab %}}
+{{% tab title="PyCharm" %}}
 Open `connector.py` and replace its contents with:
 
 ```python
@@ -309,6 +438,8 @@ class DadJokes(Connector):
 {{% notice tip %}}
 The `OPERATION_MAP` dictionary pattern is a clean way to route operations. The keys must match the **API Name** values in your `info.json` operations. When you add a new operation in the future, you just add one entry to the map and one function to `operations.py`.
 {{% /notice %}}
+{{% /tab %}}
+{{% /tabs %}}
 
 ---
 
@@ -415,9 +546,7 @@ And here's the full `info.json` with all metadata, configuration, and operations
     "publisher": "Workshop Student",
     "icon_large_name": "large_icon.png",
     "icon_small_name": "small_icon.png",
-    "category": [
-        "Utilities"
-    ],
+    "category": "Utilities",
     "configuration": {
         "fields": [
             {
@@ -512,4 +641,4 @@ Your connector now has three fully defined operations:
 - ✅ All operations are wired to `connector.py` via the `OPERATION_MAP` pattern
 - ✅ All operations reuse the `_make_request` helper for consistent headers and error handling
 
-In the next chapter, you'll **test and debug** each operation using the RDK and PyCharm's debugger.
+In the next chapter, you'll **test and debug** each operation.

@@ -5,10 +5,23 @@ description: "A step-by-step walkthrough of building a FortiSOAR connector from 
 weight: 40
 ---
 
-In this section you'll build a complete FortiSOAR connector from scratch using the **PyCharm RDK**. By the end, you'll have a working connector that talks to a real API, with configuration parameters, multiple operations, and a health check - all tested locally.
+In this section you'll build a complete FortiSOAR connector from scratch. By the end, you'll have a working connector that talks to a real API, with configuration parameters, multiple operations, and a health check - all tested locally.
+
+You can follow along in **either IDE** - the **VSCode extension** (recommended) or the **PyCharm RDK**. The connector you build is identical; only the tooling around it differs. Throughout this section, IDE-specific steps appear as tabs:
+
+{{% tabs groupid="ide" %}}
+{{% tab title="VSCode" %}}
+Steps for the [FortiSOAR Connector VSCode extension](https://github.com/ftnt-dspille/fortisoar-connector-vscode).
+{{% /tab %}}
+{{% tab title="PyCharm" %}}
+Steps for the FortiSOAR RDK plugin for PyCharm.
+{{% /tab %}}
+{{% /tabs %}}
+
+Pick your IDE in any tab above and **every tab on the page switches to match** - your choice is remembered as you move through the chapter.
 
 {{% notice note %}}
-This section assumes you have completed the [setup guides]({{< relref "02-setup" >}}), including [installing PyCharm and Python]({{< relref "01-install-pycharm-python" >}}) and [installing the SOAR RDK]({{< relref "03-install-soar-rdk" >}}).
+This section assumes you have completed the [setup guides]({{< relref "02-setup" >}}) for your IDE: the VSCode extension install, or [installing PyCharm and Python]({{< relref "02-install-pycharm-python" >}}) and [installing the SOAR RDK]({{< relref "04-install-soar-rdk" >}}).
 {{% /notice %}}
 
 ---

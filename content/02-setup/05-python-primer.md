@@ -2,7 +2,7 @@
 title: "Python Essentials for Connectors"
 linkTitle: "Python 101"
 description: "A hands-on introduction to the Python concepts you need for building FortiSOAR connectors, with practice exercises for every topic."
-weight: 20
+weight: 5
 ---
 
 This section covers the Python concepts you need to build FortiSOAR connectors. Each topic includes a short explanation followed by a hands-on exercise so you can practice immediately. Don't worry if you're not a Python expert. The goal of this chapter is not to make you an expert in python, rather give you enough information around how python is used in FortiSOAR connectors. For a full course on python, I'd recommend the free and online Python course from the [University of Helsinki](https://programming-23.mooc.fi)
@@ -14,13 +14,13 @@ This section covers the Python concepts you need to build FortiSOAR connectors. 
 
 ## Prerequisites 
 
-You can run the exercises in **PyCharm** (recommended if you completed the [installation section]({{% relref "01-install-pycharm-python" %}})). If you can't install PyCharm, you can use this free online python editor - [programiz.com/python-programming/online-compiler](https://www.programiz.com/python-programming/online-compiler/)
+You can run the exercises in **PyCharm** (recommended if you completed the [installation section]({{% relref "02-install-pycharm-python" %}})). If you can't install PyCharm, you can use this free online python editor - [programiz.com/python-programming/online-compiler](https://www.programiz.com/python-programming/online-compiler/)
 
 ![img.png](../online_ide.png)
 
 
 {{% notice tip %}}
-For the best experience, use **PyCharm** so you can also practice debugging (covered in the [Debug Python Code]({{% relref "02-debug-python" %}}) chapter). But any of the online editors above will work fine for the exercises on this page.
+For the best experience, use **PyCharm** so you can also practice debugging (covered in the [Debug Python Code]({{% relref "03-debug-python" %}}) chapter). But any of the online editors above will work fine for the exercises on this page.
 {{% /notice %}}
 
 ---

@@ -2,7 +2,7 @@
 title: "Install SOAR RDK"
 linkTitle: "Install SOAR RDK"
 description: "Install and configure the FortiSOAR PyCharm RDK plugin so you can develop, test, and export connectors directly from your IDE."
-weight: 40
+weight: 4
 ---
 
 The **FortiSOAR RDK** (Remote Development Kit) is a PyCharm plugin that lets you develop, test, and package connectors without leaving your IDE. In this section you'll install the plugin, connect it to your Python environment, and learn how to use its core features.
@@ -19,7 +19,7 @@ Before installing the RDK, make sure you have the following ready:
 | **Python Installed** | Installed via uv (or another method).                    |
 
 {{% notice note %}}
-If you haven't installed PyCharm or Python yet, complete the [Installing PyCharm, UV, and Python]({{< relref "01-install-pycharm-python" >}}) guide first. That guide covers installing PyCharm, setting up uv, and installing Python 3.12.
+If you haven't installed PyCharm or Python yet, complete the [Installing PyCharm, UV, and Python]({{< relref "02-install-pycharm-python" >}}) guide first. That guide covers installing PyCharm, setting up uv, and installing Python 3.12.
 {{% /notice %}}
 
 ---
@@ -161,7 +161,7 @@ Then retry the configure python path step.
 
 {{% notice tip %}}
 If the RDK can't find Python, double-check that you ran `uv python install 3.12` (or installed Python 3.12 through another method) and that your terminal can resolve
-`python3 --version`. See the [Python installation steps]({{< relref "01-install-pycharm-python#3-install-python-with-uv" >}}) for troubleshooting.
+`python3 --version`. See the [Python installation steps]({{< relref "02-install-pycharm-python#3-install-python-with-uv" >}}) for troubleshooting.
 {{% /notice %}}
 
 When successful, you should see the FortiSOAR Terminal show that it installed a few python packages

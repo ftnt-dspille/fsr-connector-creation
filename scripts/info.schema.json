@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "FortiSOAR Connector info.json",
+  "type": "object",
+  "required": ["name", "version"],
+  "properties": {
+    "name": { "type": "string", "pattern": "^[a-z0-9_-]+$" },
+    "label": { "type": "string" },
+    "version": { "type": "string" },
+    "description": { "type": "string" },
+    "category": { "type": "string" },
+    "publisher": { "type": "string" },
+    "icon_small_name": { "type": "string" },
+    "icon_large_name": { "type": "string" },
+    "configuration": {
+      "type": "object",
+      "properties": { "fields": { "type": "array" } }
+    },
+    "operations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["operation"],
+        "properties": {
+          "operation": { "type": "string" },
+          "title": { "type": "string" },
+          "description": { "type": "string" },
+          "annotation": { "type": "string" },
+          "enabled": { "type": "boolean" },
+          "parameters": { "type": "array" },
+          "output_schema": {}
+        }
+      }
+    }
+  }
+}

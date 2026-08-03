@@ -1,7 +1,7 @@
 ---
 title: "Installing PyCharm, UV, and Python"
 description: "A step-by-step guide to installing PyCharm on Windows and macOS, setting up Python via uv, and creating your first project."
-weight: 1
+weight: 2
 ---
 
 This guide walks you through installing **PyCharm**, using **uv** to install **Python**, and creating your first project to verify everything works.

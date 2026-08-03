@@ -50,7 +50,7 @@ Once the plugin is installed and configured, here are the core workflows you'll 
 5. Review the output and debug as needed.
 
 {{% notice tip %}}
-You can use PyCharm's built-in debugger alongside the RDK. Set breakpoints in `connector.py` before clicking **Execute Action** and the debugger will pause at your breakpoints. See the [Debug Python Code]({{< relref "02-debug-python" >}}) guide for a refresher on breakpoints and stepping.
+You can use PyCharm's built-in debugger alongside the RDK. Set breakpoints in `connector.py` before clicking **Execute Action** and the debugger will pause at your breakpoints. See the [Debug Python Code]({{< relref "03-debug-python" >}}) guide for a refresher on breakpoints and stepping.
 {{% /notice %}}
 
 ### Format your code

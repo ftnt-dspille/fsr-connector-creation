@@ -1,0 +1,26 @@
+{{- /*
+  Renders a screenshot captured by scripts/screenshots/run.sh.
+
+    {{< shot connector-tree "The FortiSOAR Connectors view" >}}
+
+  The id is the shot's id in scripts/screenshots/capture.mjs, which is also the
+  filename under static/screenshots/.
+
+  The HUGO_ASSET_PREFIX prefix is what makes these work on GitHub Pages, where
+  the site is served from a /<repo>/ subpath. relURL does NOT do it here:
+  canonifyURLs and relativeURLs are both off, so Hugo leaves absolute paths
+  alone and a bare /screenshots/... 404s there while looking fine locally. The
+  same env var is how partials/custom-header.html reaches static/fonts and
+  static/images; the CI workflow sets it from the repo name.
+
+  Fails the build if the named shot doesn't exist -- a renamed or dropped shot
+  should break loudly, not render a broken image.
+*/ -}}
+{{- $id := .Get 0 -}}
+{{- $alt := .Get 1 | default $id -}}
+{{- $rel := printf "screenshots/%s.png" $id -}}
+{{- if not (os.FileExists (printf "static/%s" $rel)) -}}
+  {{- errorf "shot %q: static/%s not found -- run scripts/screenshots/run.sh (used in %s)" $id $rel $.Position -}}
+{{- end -}}
+{{- $prefix := getenv "HUGO_ASSET_PREFIX" | default "" -}}
+<img src="{{ printf "%s/%s" $prefix $rel }}" alt="{{ $alt }}" loading="lazy">

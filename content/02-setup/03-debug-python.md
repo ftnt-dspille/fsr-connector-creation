@@ -1,14 +1,14 @@
 ---
 title: "Debug Python Code"
 description: "Learn how to use PyCharm's debugger to set breakpoints, step through code, and inspect variables. These are essential skills for finding and fixing bugs."
-weight: 30
+weight: 3
 ---
 
 This guide teaches you the fundamentals of **debugging
 ** in PyCharm. You'll learn how to pause your code mid-execution, inspect what's happening, and step through it line by line to find and fix bugs. Debugging is crucial when working with complex code, and especially so when troubleshooting other people's code.
 
 {{% notice note %}}
-This page assumes you have completed [Installing PyCharm, UV, and Python]({{< relref "01-install-pycharm-python" >}}) and have a working PyCharm project.
+This page assumes you have completed [Installing PyCharm, UV, and Python]({{< relref "02-install-pycharm-python" >}}) and have a working PyCharm project.
 {{% /notice %}}
 
 ---

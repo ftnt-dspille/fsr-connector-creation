@@ -1,0 +1,12 @@
+{
+  "name": "fsr-workshop-screenshots",
+  "private": true,
+  "type": "module",
+  "description": "Playwright capture harness for the FortiSOAR Connector VSCode extension screenshots",
+  "scripts": {
+    "capture": "node capture.mjs"
+  },
+  "devDependencies": {
+    "playwright": "^1.62.1"
+  }
+}

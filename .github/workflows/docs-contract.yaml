@@ -1,0 +1,28 @@
+# Fails the build when workshop content cites a command id, command title,
+# settings key, or walkthrough step the VSCode extension does not actually ship,
+# or when a fenced code snippet doesn't parse / doesn't match the connector
+# info.json schema. Both inputs are vendored under scripts/; refresh with
+#   python3 scripts/lint-docs-contract.py  --refresh /path/to/fortisoar-connector-vscode
+#   python3 scripts/lint-code-snippets.py  --refresh /path/to/fortisoar-connector-vscode
+name: Docs contract
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Lint content against the extension contract
+        run: python3 scripts/lint-docs-contract.py --coverage
+      - name: Install snippet-linter dependencies
+        run: pip install jsonschema
+      - name: Lint the code snippets in content
+        run: python3 scripts/lint-code-snippets.py

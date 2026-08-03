@@ -1,0 +1,5 @@
+# Labels that appear after an arrow in the docs but are NOT extension menu
+# items (VSCode built-ins, OS dialogs, third-party extensions). One per line.
+
+# PyCharm "FortiSOAR RDK" plugin menu -- a different tool from the VSCode extension.
+Import FortiSOAR Connector
