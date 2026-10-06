@@ -2,6 +2,7 @@
 title: FortiSOAR Connectors Workshop
 linkTitle: Connector Workshop
 weight: 10
+description: "Hands-on FortiSOAR workshop: build custom connectors from scratch - core Python concepts, connector architecture, developing inside FortiSOAR and with the PyCharm RDK plugin, plus testing, debugging, and best practices."
 ---
 
 ## Workshop Overview
